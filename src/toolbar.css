@@ -1,0 +1,18 @@
+
+#toolbar {
+    width: 90px;
+    height: 300px;
+    display: inline-block;
+    vertical-align: top;
+    padding: 0 10px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+#toolbar .toolbar-button {
+    width: 70px;
+    height: 60px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+

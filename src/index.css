@@ -1,0 +1,36 @@
+
+.hidden {
+  display: none;
+}
+
+#app-wrapper {
+  width: 1000px;
+  height: 600px;
+  position: relative;
+  border: 2px solid black;
+}
+
+#app-header {
+  border-bottom: 2px solid black;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+}
+
+#app-body {
+  position: absolute;
+  top: 30px;
+  bottom: 30px;
+  width: 100%;
+}
+
+#app-footer {
+  border-top: 2px solid black;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 30px;
+}
+

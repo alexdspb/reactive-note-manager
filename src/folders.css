@@ -1,0 +1,28 @@
+
+#folders-list {
+    width: 250px;
+    height: 500px;
+    display: inline-block;
+    vertical-align: top;
+    border: 2px solid black;
+    margin-top: 20px;
+}
+
+#folders-list ul {
+    list-style: none;
+    padding-left: 25px;
+}
+
+.folder-item > span {
+    line-height: 24px;
+    vertical-align: top;
+}
+
+.folder-item.selected > span {
+    font-weight: bold;
+    border: 1px dotted #000;
+}
+
+.folder-item.selected > i {
+    color: #000;
+}

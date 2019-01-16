@@ -1,0 +1,73 @@
+
+input {
+    width: 100%
+}
+
+textarea {
+    width: 100%
+}
+
+#notes-area {
+    width: 610px;
+    height: 500px;
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 20px;
+    margin-top: 20px;
+}
+
+#notes-toolbar {
+    font-size: 12px;
+}
+
+#notes-toolbar .toolbar-button {
+    margin: 0 10px;
+}
+
+#notes-search {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#notes-search input[type="checkbox"] {
+    width: auto;
+    margin-right: 5px;
+}
+
+#notes-search label {
+    font-size: 12px;
+    font-weight: normal;
+}
+
+
+.note-item {
+    display: inline-block;
+    padding: 5px;
+    text-align: center;
+    width: 120px;
+    height: 60px;
+    border: 1px dotted transparent;
+    vertical-align: top;
+}
+
+.note-item.selected {
+    border: 1px dotted #000;
+}
+
+.note-item.selected > div,
+.note-item.selected > div > i {
+    color: #000;
+}
+
+.note-item.dragging {
+    opacity: .5;
+}
+
+.note-title {
+    font-size: 12px;
+    overflow: hidden;
+    max-height: 1.4em;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
