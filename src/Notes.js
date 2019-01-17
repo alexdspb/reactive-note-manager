@@ -177,13 +177,13 @@ const SearchForm = props => {
     var suggestions = [];
     notes.map((note) => {
         note.title.split(' ').map((word) => {
-            const cleanWord =  word.replace(/[\.,\?]$/g, '').toLowerCase()
+            const cleanWord =  word.replace(/[\.,\?\!]+$/g, '').toLowerCase()
             if (cleanWord.length > 3) {
                 suggestions = suggestions.concat([cleanWord])
             }
         })
         note.description.split(' ').map((word) => {
-            const cleanWord =  word.replace(/[\.,\?]$/g, '').toLowerCase()
+            const cleanWord =  word.replace(/[\.,\?\!]+$/g, '').toLowerCase()
             if (cleanWord.length > 3) {
                 suggestions = suggestions.concat([cleanWord])
             }
