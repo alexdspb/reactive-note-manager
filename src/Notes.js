@@ -2,8 +2,8 @@ import React from 'react'
 import './notes.css'
 import MaterialIcon from 'material-icons-react'
 import { Modal, Button } from 'react-bootstrap'
-import {addNote, editNote, removeNote, loadNote, selectNote, setNoteFolderId, setNoteTitle, setNoteDescription,
-    toggleNoteModal, setSearch} from './actions'
+import {addNote, editNote, removeNote, loadNote, selectNote, setNoteFolderId,
+    setNoteTitle, setNoteDescription, setNoteTags, toggleNoteModal, setSearch} from './actions'
 import {apiUrl, rootFolderId} from './constants'
 import NotesList from './NotesList'
 
@@ -18,6 +18,10 @@ const onNodeModalChange = (e) => {
             break
         case 'description':
             window.store.dispatch(setNoteDescription(value))
+            break
+        case 'tags':
+            const tags = value.split(',').map((item) => item.trim())
+            window.store.dispatch(setNoteTags(tags))
             break
         default:
             console.log({[name]: value})
@@ -73,7 +77,10 @@ const NoteModal = ({ store }) => {
                     <input type={'text'} name={'title'} value={note.title} onChange={onNodeModalChange} /><br />
                     <br />
                     <label>Description</label><br />
-                    <textarea name={'description'} onChange={onNodeModalChange} value={note.description} />
+                    <textarea name={'description'} value={note.description} rows={5} onChange={onNodeModalChange} /><br />
+                    <br />
+                    <label>Tags</label><br />
+                    <input type={'text'} name={'tags'} value={note.tags} onChange={onNodeModalChange} />
                     <br /><br />
                     <Button type={'submit'} bsStyle="primary">{note.id ? 'Save' : 'Add'}</Button>
                     <span style={{width: '20px', display: 'inline-block'}}></span>

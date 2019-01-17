@@ -71,6 +71,8 @@ export const note = (state = {}, action) => {
             return {...state, title: action.title}
         case actionsNames.SET_NOTE_DESCRIPTION:
             return {...state, description: action.description}
+        case actionsNames.SET_NOTE_TAGS:
+            return {...state, tags: action.tags}
         default:
             return state
     }

@@ -127,3 +127,10 @@ export const setNoteDescription = description => {
     })
 }
 
+export const setNoteTags = tags => {
+    return ({
+        type: actionsNames.SET_NOTE_TAGS,
+        tags
+    })
+}
+
