@@ -4,6 +4,7 @@ import Toolbar from "./Toolbar"
 import Notes from "./Notes"
 import {apiUrl, rootFolderId} from './constants'
 import { fetchFolders, fetchNotes, selectFolder } from "./actions";
+import ReactTooltip from 'react-tooltip'
 
 class App extends Component {
     store = {}
@@ -30,6 +31,7 @@ class App extends Component {
 
         return (
             <div id="app-wrapper">
+                <ReactTooltip />
                 <div id={'app-header'}>Manager</div>
                 <div id={'app-body'}>
                     <Toolbar store={this.store} />

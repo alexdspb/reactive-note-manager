@@ -107,7 +107,7 @@ const AddNoteButton = ({store}) => {
             } else {
                 alert('Select a folder for the new note')
             }
-        }} >
+        }} data-tip={'Create a new note'} >
             <div className={'toolbar-button-inner'}>
                 <MaterialIcon icon={'add'} size={14} />
                 <span>Add</span>
@@ -127,7 +127,7 @@ const EditNoteButton = ({store}) => {
             } else {
                 alert('Select a note to edit.');
             }
-        }} >
+        }} data-tip={'Edit selected note'} >
             <div className={'toolbar-button-inner'}>
                 <MaterialIcon icon={'edit'} size={14} />
                 <span>Edit</span>
@@ -160,7 +160,7 @@ const RemoveNoteButton = props => {
             } else {
                 alert('Select a note to remove.');
             }
-        }} >
+        }} data-tip={'Remove selected note'} >
             <div className={'toolbar-button-inner'}>
                 <MaterialIcon icon={'remove'} size={14} />
                 <span>Remove</span>
@@ -195,29 +195,33 @@ const SearchForm = props => {
 
     return (
         <form>
-            <Autocomplete
-                value={app.search.q}
-                items={suggestions}
-                inputProps={{placeholder: 'Search'}}
-                wrapperStyle={{style: {width: '100%'}}}
-                getItemValue={item => item}
-                shouldItemRender={(item, value) => value.length >= 3 ? item.toLowerCase().indexOf(value.toLowerCase()) > -1 : false}
-                renderItem={(item, isHighlighted) =>
-                    <div key={item} style={{ backgroundColor: isHighlighted ? '#eee' : 'transparent'}}>
-                        {item}
-                    </div>
-                }
-                onChange={(e, value) => {
-                    store.dispatch(setSearch({q: value}))
-                }}
-                onSelect={value => {
-                    store.dispatch(setSearch({q: value}))
-                }}
-            />
+            <div data-tip={'Type a text you wish to find.'}>
+                <Autocomplete
+                    value={app.search.q}
+                    items={suggestions}
+                    inputProps={{
+                        placeholder: 'Search'
+                    }}
+                    wrapperStyle={{style: {width: '100%'}}}
+                    getItemValue={item => item}
+                    shouldItemRender={(item, value) => value.length >= 3 ? item.toLowerCase().indexOf(value.toLowerCase()) > -1 : false}
+                    renderItem={(item, isHighlighted) =>
+                        <div key={item} style={{ backgroundColor: isHighlighted ? '#eee' : 'transparent'}}>
+                            {item}
+                        </div>
+                    }
+                    onChange={(e, value) => {
+                        store.dispatch(setSearch({q: value}))
+                    }}
+                    onSelect={value => {
+                        store.dispatch(setSearch({q: value}))
+                    }}
+                />
+            </div>
             <input type={'checkbox'} name={'advanced'} id={'advanced'} onChange={(e) => {
                 store.dispatch(setSearch({advanced: e.target.checked}))
             }} />
-            <label htmlFor={'advanced'}>use advanced search</label>
+            <label htmlFor={'advanced'} data-tip={'Advanced search includes body and tags.'}>use advanced search</label>
         </form>
     )
 }

@@ -54,7 +54,6 @@ textarea {
     border: 1px dotted #000;
 }
 
-.note-item.selected > div,
 .note-item.selected > div > i {
     color: #000;
 }

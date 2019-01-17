@@ -29,7 +29,7 @@ const Folders = props => {
     const { store, foldersData } = props
 
     return (
-        <div id={'folders-list'}>
+        <div id={'folders-list'} data-tip={'Select a folder to view'}>
             <ul>
                 <FolderItem foldersData={foldersData} parentId={rootFolderId} store={store} />
             </ul>

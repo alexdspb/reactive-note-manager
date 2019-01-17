@@ -5,6 +5,7 @@ import {selectNote, editNote} from './actions'
 import {apiUrl, dndTypes} from './constants'
 import { findDOMNode } from 'react-dom'
 import {DragSource, DropTarget} from 'react-dnd'
+import ReactTooltip from 'react-tooltip'
 
 
 const noteSource = {
@@ -78,11 +79,14 @@ class Note extends Component {
 
         return connectDragSource(
             connectDropTarget(
-                <div id={`note-${note.id}`} className={noteClass} title={index} onClick={() => {
+                <div id={`note-${note.id}`} className={noteClass} onClick={() => {
                     store.dispatch(selectNote(note.id))
                 }} data-id={note.id}>
-                    <div className={'note-icon'} data-id={note.id}><MaterialIcon icon={'note'} data-id={note.id}/></div>
-                    <div className={'note-title'} data-id={note.id}>{note.title}</div>
+                    <ReactTooltip/>
+                    <div className={'note-icon'} data-id={note.id} data-tip={'Select a note you want to edit or remove.'}>
+                        <MaterialIcon icon={'note'} data-id={note.id}/>
+                    </div>
+                    <div className={'note-title'} data-id={note.id} data-tip={note.title}>{note.title}</div>
                 </div>
             )
         )

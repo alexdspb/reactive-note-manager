@@ -80,7 +80,11 @@ const removeFolderDialog = async ({store}) => {
 
 const AddFolderButton = ({store}) => {
     return (
-        <button type={'button'} id={'add-button'} className={'toolbar-button'} onClick={() => addFolderDialog({store})} >
+        <button
+            type={'button'} id={'add-button'} className={'toolbar-button'}
+            onClick={() => addFolderDialog({store})}
+            data-tip={'Create new folder'}
+        >
             <div><MaterialIcon icon={'add'}/></div>
             <div>Add</div>
         </button>
@@ -89,7 +93,11 @@ const AddFolderButton = ({store}) => {
 
 const EditFolderButton = ({store}) => {
     return (
-        <button id={'edit-button'} className={'toolbar-button'} onClick={() => editFolderDialog({store})} >
+        <button
+            id={'edit-button'} className={'toolbar-button'}
+            onClick={() => editFolderDialog({store})}
+            data-tip={'Edit selected folder'}
+        >
             <div><MaterialIcon icon="edit"/></div>
             <div>Edit</div>
         </button>
@@ -98,7 +106,11 @@ const EditFolderButton = ({store}) => {
 
 const RemoveFolderButton = ({store}) => {
     return (
-        <button id={'remove-button'} className={'toolbar-button'} onClick={() => removeFolderDialog({store})}>
+        <button
+            id={'remove-button'} className={'toolbar-button'}
+            onClick={() => removeFolderDialog({store})}
+            data-tip={'Remove selected folder'}
+        >
             <div><MaterialIcon icon="remove"/></div>
             <div>Remove</div>
         </button>
