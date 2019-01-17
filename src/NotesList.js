@@ -31,15 +31,16 @@ const searchNotes = (notes, params) => {
     // search by query
     if (params.q) {
         if (params.advanced) {
-            // perform advanced search
+            // perform advanced search - by title, description and tags
             found = found.filter(item => {
                 return (
-                    item.title.search(new RegExp(params.q, "i")) !== -1 ||
-                    item.description.search(new RegExp(params.q, "i")) !== -1
+                    (item.title.search(new RegExp(params.q, "i")) !== -1) ||
+                    (item.description.search(new RegExp(params.q, "i")) !== -1) ||
+                    (item.tags ? item.tags.join(',').search(new RegExp(params.q, "i")) !== -1 : false)
                 )
             })
         } else {
-            // simple search
+            // simple search - by title
             found = found.filter(item => (
                 item.title.search(new RegExp(params.q, "i")) !== -1)
             )
