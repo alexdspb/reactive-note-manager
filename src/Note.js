@@ -1,11 +1,12 @@
 import React, {Component} from 'react'
 import './notes.css'
 import MaterialIcon from 'material-icons-react'
-import {selectNote, editNote} from './actions'
+import {selectNote, editNote, addNote} from './actions'
 import {apiUrl, dndTypes} from './constants'
 import { findDOMNode } from 'react-dom'
 import {DragSource, DropTarget} from 'react-dnd'
 import ReactTooltip from 'react-tooltip'
+import EditableLabel from 'react-editable-label'
 
 
 const noteSource = {
@@ -69,6 +70,25 @@ const noteTarget = {
     }
 }
 
+const saveEditableTitle = (value, note, store) => {
+    const newNote = {...note, title: value}
+    const url = `${apiUrl}/notices/${note.id}`
+
+    fetch(url, {
+        method: 'PUT',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newNote)
+    }).then(
+        result => result.json()
+    ).then(
+        result => {
+            store.dispatch(editNote(result))
+        }
+    )
+}
 
 class Note extends Component {
     render() {
@@ -86,7 +106,9 @@ class Note extends Component {
                     <div className={'note-icon'} data-id={note.id} data-tip={'Select a note you want to edit or remove.'}>
                         <MaterialIcon icon={'note'} data-id={note.id}/>
                     </div>
-                    <div className={'note-title'} data-id={note.id} data-tip={note.title}>{note.title}</div>
+                    <div className={'note-title'} data-id={note.id} data-tip={note.title}>
+                        <EditableLabel initialValue={note.title} save={value => saveEditableTitle(value, note, store)}/>
+                    </div>
                 </div>
             )
         )
