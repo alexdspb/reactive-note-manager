@@ -1,7 +1,17 @@
 
 export const apiUrl = 'http://192.168.56.101:3001'
 
-export const initialState = {}
+export const initialState = {
+    app: {
+        search: {
+            q: '',
+            advanced: false
+        }
+    },
+    folders: [],
+    notes: [],
+    note: {}
+}
 
 export const actionsNames = {
     FETCH_FOLDERS: 'FETCH_FOLDERS',

@@ -6,6 +6,7 @@ import {addNote, editNote, removeNote, loadNote, selectNote, setNoteFolderId,
     setNoteTitle, setNoteDescription, setNoteTags, toggleNoteModal, setSearch} from './actions'
 import {apiUrl, rootFolderId} from './constants'
 import NotesList from './NotesList'
+import Autocomplete from 'react-autocomplete'
 
 const onNodeModalChange = (e) => {
     const {name, value} = e.target;
@@ -168,26 +169,55 @@ const RemoveNoteButton = props => {
     )
 }
 
-const onSearchFormChange = (e) => {
-    const {name, value} = e.target
-
-    switch (name) {
-        case 'q':
-            window.store.dispatch(setSearch({q: value}))
-            break
-        case 'advanced':
-            window.store.dispatch(setSearch({advanced: e.target.checked}))
-            break
-        default:
-            console.log({[name]: value})
-    }
-}
-
 const SearchForm = props => {
+    const { store } = props
+    const { app, notes } = store.getState()
+
+    // fetch suggestions from notes content
+    var suggestions = [];
+    notes.map((note) => {
+        note.title.split(' ').map((word) => {
+            const cleanWord =  word.replace(/[\.,\?]$/g, '').toLowerCase()
+            if (cleanWord.length > 3) {
+                suggestions = suggestions.concat([cleanWord])
+            }
+        })
+        note.description.split(' ').map((word) => {
+            const cleanWord =  word.replace(/[\.,\?]$/g, '').toLowerCase()
+            if (cleanWord.length > 3) {
+                suggestions = suggestions.concat([cleanWord])
+            }
+        })
+        if (note.tags && note.tags.length > 0) {
+            suggestions = suggestions.concat(note.tags)
+        }
+    })
+
     return (
-        <form autoComplete={'off'} onChange={onSearchFormChange}>
-            <input type={'text'} name={'q'} placeholder={'Search'} />
-            <input type={'checkbox'} name={'advanced'} id={'advanced'} /><label htmlFor={'advanced'}>use advanced search</label>
+        <form>
+            <Autocomplete
+                value={app.search.q}
+                items={suggestions}
+                inputProps={{placeholder: 'Search'}}
+                wrapperStyle={{style: {width: '100%'}}}
+                getItemValue={item => item}
+                shouldItemRender={(item, value) => value.length >= 3 ? item.toLowerCase().indexOf(value.toLowerCase()) > -1 : false}
+                renderItem={(item, isHighlighted) =>
+                    <div key={item} style={{ backgroundColor: isHighlighted ? '#eee' : 'transparent'}}>
+                        {item}
+                    </div>
+                }
+                onChange={(e, value) => {
+                    store.dispatch(setSearch({q: value}))
+                }}
+                onSelect={value => {
+                    store.dispatch(setSearch({q: value}))
+                }}
+            />
+            <input type={'checkbox'} name={'advanced'} id={'advanced'} onChange={(e) => {
+                store.dispatch(setSearch({advanced: e.target.checked}))
+            }} />
+            <label htmlFor={'advanced'}>use advanced search</label>
         </form>
     )
 }
