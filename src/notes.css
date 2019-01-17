@@ -70,3 +70,9 @@ textarea {
     text-overflow: ellipsis;
 }
 
+.note-title > div > span {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 110px;
+    display: inline-block;
+}
