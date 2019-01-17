@@ -3,6 +3,8 @@ import './notes.css'
 import { rootFolderId } from './constants'
 import Note from "./Note"
 import {editNote} from "./actions";
+import { DragDropContext } from 'react-dnd'
+import HTML5Backend from 'react-dnd-html5-backend'
 
 
 const searchNotes = (notes, params) => {
@@ -60,4 +62,4 @@ const NotesList = props => {
     }))
 }
 
-export default NotesList
+export default DragDropContext(HTML5Backend)(NotesList)

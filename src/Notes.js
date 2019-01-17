@@ -6,8 +6,6 @@ import {addNote, editNote, removeNote, loadNote, selectNote, setNoteFolderId, se
     toggleNoteModal, setSearch} from './actions'
 import {apiUrl, rootFolderId} from './constants'
 import NotesList from './NotesList'
-import { DragDropContext } from 'react-dnd'
-import HTML5Backend from 'react-dnd-html5-backend'
 
 const onNodeModalChange = (e) => {
     const {name, value} = e.target;
@@ -208,5 +206,5 @@ const Notes = props => {
     )
 }
 
-export default DragDropContext(HTML5Backend)(Notes)
+export default Notes
 
