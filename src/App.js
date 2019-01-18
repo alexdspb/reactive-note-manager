@@ -77,6 +77,7 @@ class Home extends Component {
                 // select folder that passed through url
                 const folderId = (match.path === '/folder/:id' && match.isExact && folderExist(parseInt(match.params.id, 10), folders)) ? parseInt(match.params.id, 10) : rootFolderId
                 this.store.dispatch(selectFolder(folderId))
+                this.store.dispatch(setSearch({folderId: folderId, q: ''}))
             })
         fetch(`${apiUrl}/notices`)
             .then(result => result.json())
