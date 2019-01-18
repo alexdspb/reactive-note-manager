@@ -7,6 +7,7 @@ import {addNote, editNote, removeNote, loadNote, selectNote, setNoteFolderId,
 import {apiUrl, rootFolderId} from './constants'
 import NotesList from './NotesList'
 import Autocomplete from 'react-autocomplete'
+import { Link } from 'react-router-dom'
 
 const onNodeModalChange = (e) => {
     const {name, value} = e.target;
@@ -207,7 +208,7 @@ const SearchForm = props => {
                     shouldItemRender={(item, value) => value.length >= 3 ? item.toLowerCase().indexOf(value.toLowerCase()) > -1 : false}
                     renderItem={(item, isHighlighted) =>
                         <div key={item} style={{ backgroundColor: isHighlighted ? '#eee' : 'transparent'}}>
-                            {item}
+                            <Link to={`/${app.search.advanced ? 'advanced_search' : 'search'}/${item}`}>{item}</Link>
                         </div>
                     }
                     onChange={(e, value) => {
@@ -220,14 +221,14 @@ const SearchForm = props => {
             </div>
             <input type={'checkbox'} name={'advanced'} id={'advanced'} onChange={(e) => {
                 store.dispatch(setSearch({advanced: e.target.checked}))
-            }} />
+            }} checked={app.search.advanced}/>
             <label htmlFor={'advanced'} data-tip={'Advanced search includes body and tags.'}>use advanced search</label>
         </form>
     )
 }
 
 const Notes = props => {
-    const { store } = props
+    const { store, notes } = props
 
     return (
         <div id={'notes-area'}>
@@ -240,7 +241,7 @@ const Notes = props => {
                 <SearchForm store={store} />
             </div>
             <div id={'notes-list'}>
-                <NotesList store={store} />
+                <NotesList store={store} notes={notes} />
             </div>
             <NoteModal store={store} />
         </div>

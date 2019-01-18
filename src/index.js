@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import {AppWrapper, AppRouter} from './App';
 import * as serviceWorker from './serviceWorker';
 import { createStore, combineReducers } from 'redux'
 import { app, folders, notes, note } from './reducers'
@@ -12,7 +12,9 @@ window.store = store
 
 const render = () => {
     ReactDOM.render(
-        <App store={store} />,
+        <AppWrapper store={store} >
+            <AppRouter/>
+        </AppWrapper>,
         document.getElementById('root')
     )
 }

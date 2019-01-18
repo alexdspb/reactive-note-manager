@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import './notes.css'
 import MaterialIcon from 'material-icons-react'
-import {selectNote, editNote, addNote} from './actions'
+import {selectNote, editNote, addNote, loadNote, toggleNoteModal} from './actions'
 import {apiUrl, dndTypes} from './constants'
 import { findDOMNode } from 'react-dom'
 import {DragSource, DropTarget} from 'react-dnd'
@@ -103,7 +103,13 @@ class Note extends Component {
                     store.dispatch(selectNote(note.id))
                 }} data-id={note.id}>
                     <ReactTooltip/>
-                    <div className={'note-icon'} data-id={note.id} data-tip={'Select a note you want to edit or remove.'}>
+                    <div className={'note-icon'} data-id={note.id}
+                         data-tip={'Select a note you want to edit or remove.'}
+                         onDoubleClick={() => {
+                             store.dispatch(loadNote(note))
+                             store.dispatch(toggleNoteModal())
+                         }}
+                    >
                         <MaterialIcon icon={'note'} data-id={note.id}/>
                     </div>
                     <div className={'note-title'} data-id={note.id} data-tip={note.title}>

@@ -51,8 +51,8 @@ const searchNotes = (notes, params) => {
 }
 
 const NotesList = props => {
-    const { store } = props
-    const { app, notes } = store.getState()
+    const { store, notes } = props
+    const { app } = store.getState()
 
     const foundNotes = searchNotes(notes, app.search)
 
