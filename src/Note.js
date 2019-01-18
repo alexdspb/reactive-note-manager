@@ -113,7 +113,7 @@ class Note extends Component {
                         <MaterialIcon icon={'note'} data-id={note.id}/>
                     </div>
                     <div className={'note-title'} data-id={note.id} data-tip={note.title}>
-                        <EditableLabel initialValue={note.title} save={value => saveEditableTitle(value, note, store)}/>
+                        {note.title}
                     </div>
                 </div>
             )
