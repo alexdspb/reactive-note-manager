@@ -182,16 +182,19 @@ const SearchForm = props => {
             if (cleanWord.length > 3) {
                 suggestions = suggestions.concat([cleanWord])
             }
+            return null
         })
         note.description.split(' ').map((word) => {
             const cleanWord =  word.replace(/[\.,\?\!]+$/g, '').toLowerCase()
             if (cleanWord.length > 3) {
                 suggestions = suggestions.concat([cleanWord])
             }
+            return null
         })
         if (note.tags && note.tags.length > 0) {
             suggestions = suggestions.concat(note.tags)
         }
+        return null
     })
 
     return (

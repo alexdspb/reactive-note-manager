@@ -6,7 +6,6 @@ import {apiUrl, rootFolderId} from './constants'
 import {fetchFolders, fetchNotes, loadNote, selectFolder, selectNote, setSearch, toggleNoteModal} from "./actions";
 import ReactTooltip from 'react-tooltip'
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
-import {ShowNote} from './Notes'
 import {folderExist, getNoteById, noteExist} from './utils'
 
 
@@ -65,7 +64,6 @@ class Home extends Component {
     }
 
     componentDidMount() {
-        const { app } = this.store.getState()
 
 
         fetch(`${apiUrl}/directories`)

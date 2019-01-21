@@ -1,12 +1,10 @@
 import React, {Component} from 'react'
 import './notes.css'
 import MaterialIcon from 'material-icons-react'
-import {selectNote, editNote, addNote, loadNote, toggleNoteModal} from './actions'
+import {selectNote, editNote, loadNote, toggleNoteModal} from './actions'
 import {apiUrl, dndTypes} from './constants'
-import { findDOMNode } from 'react-dom'
 import {DragSource, DropTarget} from 'react-dnd'
 import ReactTooltip from 'react-tooltip'
-import EditableLabel from 'react-editable-label'
 
 
 const noteSource = {
@@ -41,7 +39,6 @@ const noteTarget = {
     },
     drop(props, monitor, component) {
         const item = monitor.getItem()
-        const dragIndex = item.index
         const hoverIndex = props.index
 
         const newNote = {...item.note, position: hoverIndex}
@@ -70,30 +67,9 @@ const noteTarget = {
     }
 }
 
-const saveEditableTitle = (value, note, store) => {
-    const newNote = {...note, title: value}
-    const url = `${apiUrl}/notices/${note.id}`
-
-    fetch(url, {
-        method: 'PUT',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(newNote)
-    }).then(
-        result => result.json()
-    ).then(
-        result => {
-            store.dispatch(editNote(result))
-        }
-    )
-}
-
 class Note extends Component {
     render() {
-        const { store, note, index, isSelected, isDragging, connectDragSource, connectDropTarget } = this.props
-        const { app } = store.getState()
+        const { store, note, isSelected, isDragging, connectDragSource, connectDropTarget } = this.props
         const noteClass = `note-item ${isSelected ? 'selected' : ''} ${isDragging ? 'dragging' : ''}`
 
 
