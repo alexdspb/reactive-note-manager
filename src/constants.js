@@ -10,10 +10,12 @@ export const initialState = {
     },
     folders: [],
     notes: [],
+    folder: {},
     note: {}
 }
 
 export const actionsNames = {
+    // folders
     FETCH_FOLDERS: 'FETCH_FOLDERS',
     ADD_FOLDER: 'ADD_FOLDER',
     EDIT_FOLDER: 'EDIT_FOLDER',
@@ -22,14 +24,23 @@ export const actionsNames = {
     SELECT_NOTE: 'SELECT_NOTE',
     SET_SEARCH: 'SET_SEARCH',
 
+    // app
+    TOGGLE_FOLDER_MODAL: 'TOGGLE_FOLDER_MODAL',
+    TOGGLE_REMOVE_FOLDER_MODAL: 'TOGGLE_REMOVE_FOLDER_MODAL',
     TOGGLE_NOTE_MODAL: 'TOGGLE_NOTE_MODAL',
 
+    // notes
     FETCH_NOTES: 'FETCH_NOTES',
     ADD_NOTE: 'ADD_NOTE',
     EDIT_NOTE: 'EDIT_NOTE',
     REMOVE_NOTE: 'REMOVE_NOTE',
     CHANGE_NOTE_POSITION: 'CHANGE_NOTE_POSITION',
 
+    // folder
+    LOAD_FOLDER: 'LOAD_FOLDER',
+    SET_FOLDER_NAME: 'SET_FOLDER_NAME',
+
+    // note
     LOAD_NOTE: 'LOAD_NOTE',
     SET_NOTE_FOLDER_ID: 'SET_NOTE_FOLDER_ID',
     SET_NOTE_TITLE: 'SET_NOTE_TITLE',

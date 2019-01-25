@@ -16,6 +16,18 @@ export const selectNote = id => {
     })
 }
 
+export const toggleFolderModal = () => {
+    return ({
+        type: actionsNames.TOGGLE_FOLDER_MODAL,
+    })
+}
+
+export const toggleRemoveFolderModal = () => {
+    return ({
+        type: actionsNames.TOGGLE_REMOVE_FOLDER_MODAL,
+    })
+}
+
 export const toggleNoteModal = () => {
     return ({
         type: actionsNames.TOGGLE_NOTE_MODAL,
@@ -94,6 +106,22 @@ export const changeNotePosition = (id, position) => {
         type: actionsNames.CHANGE_NOTE_POSITION,
         id,
         position
+    })
+}
+
+/* folder */
+
+export const loadFolder = folder => {
+    return ({
+        type: actionsNames.LOAD_FOLDER,
+        folder
+    })
+}
+
+export const setFolderName = name => {
+    return ({
+        type: actionsNames.SET_FOLDER_NAME,
+        name
     })
 }
 

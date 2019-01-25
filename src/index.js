@@ -4,10 +4,10 @@ import './index.css';
 import {AppWrapper, AppRouter} from './App';
 import * as serviceWorker from './serviceWorker';
 import { createStore, combineReducers } from 'redux'
-import { app, folders, notes, note } from './reducers'
+import { app, folders, notes, folder, note } from './reducers'
 import { initialState, reduxDevTools } from "./constants";
 
-const store = createStore(combineReducers({app, folders, notes, note}), initialState, reduxDevTools)
+const store = createStore(combineReducers({app, folders, notes, folder, note}), initialState, reduxDevTools)
 window.store = store
 
 const render = () => {

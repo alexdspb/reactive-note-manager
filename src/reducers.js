@@ -6,6 +6,10 @@ export const app = (state = {}, action) => {
             return {...state, selectedFolderId: action.id}
         case actionsNames.SELECT_NOTE:
             return {...state, selectedNoteId: action.id}
+        case actionsNames.TOGGLE_FOLDER_MODAL:
+            return {...state, showFolderModal: !state.showFolderModal}
+        case actionsNames.TOGGLE_REMOVE_FOLDER_MODAL:
+            return {...state, showRemoveFolderModal: !state.showRemoveFolderModal}
         case actionsNames.TOGGLE_NOTE_MODAL:
             return {...state, showNoteModal: !state.showNoteModal}
         case actionsNames.SET_SEARCH:
@@ -56,6 +60,17 @@ export const notes = (state = [], action) => {
             return [...state].map(
                 (item) => item.id === action.id ? {...item, position: action.position} : item
             )
+        default:
+            return state
+    }
+}
+
+export const folder = (state = {}, action) => {
+    switch (action.type) {
+        case actionsNames.LOAD_FOLDER:
+            return action.folder
+        case actionsNames.SET_FOLDER_NAME:
+            return {...state, name: action.name}
         default:
             return state
     }
