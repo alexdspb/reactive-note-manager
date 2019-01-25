@@ -36,28 +36,31 @@ const onNodeModalSubmit = (e) => {
     const { note } = store.getState()
     e.preventDefault()
 
-    if (note.title) {
-        const url = note.id ? `${apiUrl}/notices/${note.id}` : `${apiUrl}/notices`
-        fetch(url, {
-            method: note.id ? 'PUT' : 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(note)
-        }).then(
-            result => result.json()
-        ).then(
-            result => {
-                const action = note.id ? editNote(result) : addNote(result)
-                store.dispatch(action)
-            }
-        )
-        store.dispatch(toggleNoteModal())
-        store.dispatch(loadNote({}))
-    } else {
-        alert('Title cannot be empty!')
+    if (!note.title) {
+        return
     }
+    else if (!note.description) {
+        return
+    }
+
+    const url = note.id ? `${apiUrl}/notices/${note.id}` : `${apiUrl}/notices`
+    fetch(url, {
+        method: note.id ? 'PUT' : 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(note)
+    }).then(
+        result => result.json()
+    ).then(
+        result => {
+            const action = note.id ? editNote(result) : addNote(result)
+            store.dispatch(action)
+        }
+    )
+    store.dispatch(toggleNoteModal())
+    store.dispatch(loadNote({}))
 }
 
 const getAllTags = (notes) => {
@@ -75,7 +78,8 @@ const onTagsChange = (value, { action, removedValue }) => {
     return value.map(item => item.value)
 }
 
-const NoteModal = ({ store }) => {
+const NoteModal = props => {
+    const { store } = props
     const { app, note, notes } = store.getState()
     const options = getAllTags(notes)
     const noteTags = note.tags ? note.tags.map(item => ({label: item, value: item})) : []
@@ -89,15 +93,14 @@ const NoteModal = ({ store }) => {
                 }}>&times;</Button>
                 <Modal.Title>{note.id ? 'Edit' : 'Add'} note</Modal.Title>
             </Modal.Header>
-
             <Modal.Body>
                 <form onSubmit={onNodeModalSubmit} autoComplete={'off'}>
                     <input type={'hidden'} />
                     <label>Title</label><br />
-                    <input type={'text'} name={'title'} value={note.title} onChange={onNodeModalChange} /><br />
+                    <input required type={'text'} name={'title'} value={note.title} onChange={onNodeModalChange} /><br />
                     <br />
                     <label>Description</label><br />
-                    <textarea name={'description'} value={note.description} rows={5} onChange={onNodeModalChange} /><br />
+                    <textarea required name={'description'} value={note.description} rows={5} onChange={onNodeModalChange} /><br />
                     <br />
                     <label>Tags</label><br />
                     <CreatableSelect
@@ -120,7 +123,6 @@ const NoteModal = ({ store }) => {
                 </form>
                 <p>&nbsp;</p>
             </Modal.Body>
-
         </Modal>
     )
 }
@@ -204,25 +206,30 @@ const SearchForm = props => {
     // fetch suggestions from notes content
     var suggestions = [];
     notes.map((note) => {
-        note.title.split(' ').map((word) => {
-            const cleanWord =  word.replace(/[\.,\?\!]+$/g, '').toLowerCase()
-            if (cleanWord.length > 3) {
-                suggestions = suggestions.concat([cleanWord])
-            }
-            return null
-        })
-        note.description.split(' ').map((word) => {
-            const cleanWord =  word.replace(/[\.,\?\!]+$/g, '').toLowerCase()
-            if (cleanWord.length > 3) {
-                suggestions = suggestions.concat([cleanWord])
-            }
-            return null
-        })
+        if (note.title) {
+            note.title.split(' ').map((word) => {
+                const cleanWord =  word.replace(/[\.,\?\!]+$/g, '').toLowerCase()
+                if (cleanWord.length > 3) {
+                    suggestions = suggestions.concat([cleanWord])
+                }
+                return null
+            })
+        }
+        if (note.description) {
+            note.description.split(' ').map((word) => {
+                const cleanWord =  word.replace(/[\.,\?\!]+$/g, '').toLowerCase()
+                if (cleanWord.length > 3) {
+                    suggestions = suggestions.concat([cleanWord])
+                }
+                return null
+            })
+        }
         if (note.tags && note.tags.length > 0) {
             suggestions = suggestions.concat(note.tags)
         }
         return null
     })
+    suggestions = [...new Set(suggestions)]
 
     return (
         <form>
