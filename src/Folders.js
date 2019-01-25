@@ -42,7 +42,6 @@ const FolderItem = props => {
             <li className={app.selectedFolderId === item.id ? 'folder-item selected' : 'folder-item'} key={index} data-id={item.id}>
                 <Link to={`/folder/${item.id}`}><MaterialIcon icon={'folder'} onClick={() => onFolderClick(item.id)} data-tip={'Select a folder to view'} /></Link>
                 <EditableLabel initialValue={item.name} save={value => saveEditableName(value, item, store)} />
-                <div><span>{item.name}</span></div>
                 <ul>
                     <FolderItem parentId={item.id} store={store} />
                 </ul>

@@ -45,6 +45,6 @@
     cursor: pointer;
 }
 
-.folder-item.selected > i {
+.folder-item.selected > a > i {
     color: #000;
 }
