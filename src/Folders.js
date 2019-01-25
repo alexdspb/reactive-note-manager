@@ -33,29 +33,31 @@ const saveEditableName = (value, folder, store) => {
     )
 }
 
-const FolderItem = props => props.folders.filter(item => item.parentId === props.parentId).map((item, index) => {
-    const { store, folders } = props
-    const { app } = store.getState()
+const FolderItem = props => {
+    const { store } = props
+    const { app, folders } = store.getState()
 
-    return (
+    return folders.filter((item) => item.parentId === props.parentId).map((item, index) => {
+        return (
             <li className={app.selectedFolderId === item.id ? 'folder-item selected' : 'folder-item'} key={index} data-id={item.id}>
                 <Link to={`/folder/${item.id}`}><MaterialIcon icon={'folder'} onClick={() => onFolderClick(item.id)} data-tip={'Select a folder to view'} /></Link>
                 <EditableLabel initialValue={item.name} save={value => saveEditableName(value, item, store)} />
+                <div><span>{item.name}</span></div>
                 <ul>
-                    <FolderItem folders={folders} parentId={item.id} store={store} />
+                    <FolderItem parentId={item.id} store={store} />
                 </ul>
             </li>
-    )
-});
+        )
+    })
+}
 
 const Folders = props => {
     const { store } = props
-    const {folders} = store.getState()
 
     return (
         <div id={'folders-list'}>
             <ul>
-                <FolderItem folders={folders} parentId={rootFolderId} store={store} />
+                <FolderItem parentId={rootFolderId} store={store} />
             </ul>
         </div>
     )
