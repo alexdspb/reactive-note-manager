@@ -8,6 +8,7 @@ import {apiUrl, rootFolderId} from './constants'
 import NotesList from './NotesList'
 import Autocomplete from 'react-autocomplete'
 import { Link } from 'react-router-dom'
+import CreatableSelect from 'react-select/lib/Creatable'
 
 const onNodeModalChange = (e) => {
     const {name, value} = e.target;
@@ -59,8 +60,25 @@ const onNodeModalSubmit = (e) => {
     }
 }
 
+const getAllTags = (notes) => {
+    let tags = [];
+    notes.map((note) => {
+        if (note.tags && note.tags.length > 0) {
+            tags = tags.concat(note.tags)
+        }
+    })
+
+    return [...new Set(tags)].map(item => ({label: item, value: item}))
+}
+
+const onTagsChange = (value, { action, removedValue }) => {
+    return value.map(item => item.value)
+}
+
 const NoteModal = ({ store }) => {
-    const { app, note } = store.getState()
+    const { app, note, notes } = store.getState()
+    const options = getAllTags(notes)
+    const noteTags = note.tags ? note.tags.map(item => ({label: item, value: item})) : []
 
     return (
         <Modal show={app.showNoteModal}>
@@ -82,7 +100,16 @@ const NoteModal = ({ store }) => {
                     <textarea name={'description'} value={note.description} rows={5} onChange={onNodeModalChange} /><br />
                     <br />
                     <label>Tags</label><br />
-                    <input type={'text'} name={'tags'} value={note.tags} onChange={onNodeModalChange} />
+                    <CreatableSelect
+                        isClearable
+                        isMulti
+                        options={options}
+                        defaultValue={noteTags}
+                        onChange={(value, { action, removedValue }) => {
+                            const tags = onTagsChange(value, { action, removedValue })
+                            store.dispatch(setNoteTags(tags))
+                        }}
+                    />
                     <br /><br />
                     <Button type={'submit'} bsStyle="primary">{note.id ? 'Save' : 'Add'}</Button>
                     <span style={{width: '20px', display: 'inline-block'}}></span>
