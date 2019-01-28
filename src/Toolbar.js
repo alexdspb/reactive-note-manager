@@ -71,7 +71,7 @@ const FolderModal = ({ store }) => {
             <Modal.Body>
                 <form onSubmit={onFolderModalSubmit} autoComplete={'off'}>
                     <label>Name</label><br />
-                    <input type={'text'} name={'name'} value={folder.name} onChange={onFolderModalChange} /><br />
+                    <input type={'text'} name={'name'} value={folder.name} onChange={onFolderModalChange} autoFocus={true} /><br />
                     <br />
                     <Button type={'submit'} bsStyle="primary">{folder && folder.id ? 'Save' : 'Add'}</Button>
                     <span style={{width: '20px', display: 'inline-block'}}></span>

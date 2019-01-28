@@ -97,7 +97,7 @@ const NoteModal = props => {
                 <form onSubmit={onNodeModalSubmit} autoComplete={'off'}>
                     <input type={'hidden'} />
                     <label>Title</label><br />
-                    <input required type={'text'} name={'title'} value={note.title} onChange={onNodeModalChange} /><br />
+                    <input required type={'text'} name={'title'} value={note.title} onChange={onNodeModalChange} autoFocus={true} /><br />
                     <br />
                     <label>Description</label><br />
                     <textarea required name={'description'} value={note.description} rows={5} onChange={onNodeModalChange} /><br />
