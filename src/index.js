@@ -6,15 +6,18 @@ import * as serviceWorker from './serviceWorker';
 import { createStore, combineReducers } from 'redux'
 import { app, folders, notes, folder, note } from './reducers'
 import { initialState, reduxDevTools } from "./constants";
+import { Provider } from 'react-redux'
 
 const store = createStore(combineReducers({app, folders, notes, folder, note}), initialState, reduxDevTools)
 window.store = store
 
 const render = () => {
     ReactDOM.render(
-        <AppWrapper store={store} >
-            <AppRouter/>
-        </AppWrapper>,
+        <Provider store={store}>
+            <AppWrapper>
+                <AppRouter/>
+            </AppWrapper>
+        </Provider>,
         document.getElementById('root')
     )
 }

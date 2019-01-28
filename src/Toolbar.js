@@ -13,6 +13,7 @@ import {
 } from './actions'
 import {apiUrl, rootFolderId} from "./constants"
 import { Modal, Button } from 'react-bootstrap'
+import { AddFolderContainer } from './containers'
 
 
 const onFolderModalChange = (e) => {
@@ -143,24 +144,6 @@ const RemoveFolderModal = ({ store }) => {
 }
 
 
-const AddFolderButton = ({store}) => {
-    const { app } = store.getState()
-
-    return (
-        <button
-            type={'button'} id={'add-button'} className={'toolbar-button'}
-            onClick={() => {
-                store.dispatch(loadFolder({parentId: app.selectedFolderId}));
-                store.dispatch(toggleFolderModal())
-            }}
-            data-tip={'Create new folder'}
-        >
-            <div><MaterialIcon icon={'add'}/></div>
-            <div>Add</div>
-        </button>
-    )
-}
-
 const EditFolderButton = ({store}) => {
     const { app, folders } = store.getState()
 
@@ -215,7 +198,7 @@ class Toolbar extends Component {
 
         return (
             <div id={'toolbar'}>
-                <AddFolderButton store={store} />
+                <AddFolderContainer />
                 <EditFolderButton store={store} />
                 <RemoveFolderButton store={store}/>
                 <FolderModal store={store}/>
