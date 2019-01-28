@@ -242,17 +242,17 @@ const SearchForm = props => {
                     }}
                     wrapperStyle={{style: {width: '100%'}}}
                     getItemValue={item => item}
-                    shouldItemRender={(item, value) => value.length >= 3 ? item.toLowerCase().indexOf(value.toLowerCase()) > -1 : false}
+                    shouldItemRender={(item, value) => value.length >= 1 ? item.toLowerCase().indexOf(value.toLowerCase()) > -1 : false}
                     renderItem={(item, isHighlighted) =>
                         <div key={item} style={{ backgroundColor: isHighlighted ? '#eee' : 'transparent'}}>
-                            <Link to={`/${app.search.advanced ? 'advanced_search' : 'search'}/${item}`}>{item}</Link>
+                            <Link to={`/${app.search.advanced ? 'advanced_search' : 'search'}/${item}`} class={'suggestion_link'}>{item}</Link>
                         </div>
                     }
                     onChange={(e, value) => {
-                        store.dispatch(setSearch({q: value}))
+                        store.dispatch(setSearch({q: value, folderId: rootFolderId}))
                     }}
                     onSelect={value => {
-                        store.dispatch(setSearch({q: value}))
+                        store.dispatch(setSearch({q: value, folderId: rootFolderId}))
                     }}
                 />
             </div>

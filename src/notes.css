@@ -76,3 +76,7 @@ textarea {
     max-width: 110px;
     display: inline-block;
 }
+
+.suggestion_link {
+    display: block;
+}
