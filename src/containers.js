@@ -2,7 +2,9 @@ import { connect } from 'react-redux'
 import AddFolderButton from './components/ui/AddFolderButton'
 import EditFolderButton from './components/ui/EditFolderButton'
 import RemoveFolderButton from './components/ui/RemoveFolderButton'
-import {loadFolder, toggleFolderModal, toggleRemoveFolderModal} from './actions'
+import FolderModal from './components/ui/FolderModal'
+import {addFolder, editFolder, loadFolder, setFolderName, toggleFolderModal, toggleRemoveFolderModal} from './actions'
+import {apiUrl} from './constants'
 
 export const AddFolderContainer = connect(
     state => ({
@@ -49,9 +51,45 @@ export const FolderModalContainer = connect(
         folder: state.folder
     }),
     dispatch => ({
-        onShow(folder) {
-            dispatch(loadFolder(folder))
-            dispatch(toggleRemoveFolderModal())
+        onChange(e) {
+            const {name, value} = e.target;
+            switch (name) {
+                case 'name':
+                    dispatch(setFolderName(value))
+                    break
+                default:
+                    console.log({[name]: value})
+            }
+        },
+        onSubmit(folder) {
+
+            if (!folder.name || folder.name === '') {
+                return
+            }
+
+            const url = folder.id ? `${apiUrl}/directories/${folder.id}` : `${apiUrl}/directories`
+            fetch(url, {
+                method: folder.id ? 'PUT' : 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(folder)
+            }).then(
+                result => result.json()
+            ).then(
+                result => {
+                    const action = folder.id ? editFolder(result) : addFolder(result)
+                    dispatch(action)
+                }
+            )
+            dispatch(loadFolder({}))
+            dispatch(toggleFolderModal())
+        },
+        onCancel(e) {
+            dispatch(loadFolder({}))
+            dispatch(toggleFolderModal())
         }
     })
-)(RemoveFolderButton)
+)(FolderModal)
+
