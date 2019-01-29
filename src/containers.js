@@ -4,6 +4,7 @@ import EditFolderButton from './components/ui/EditFolderButton'
 import RemoveFolderButton from './components/ui/RemoveFolderButton'
 import FolderModal from './components/ui/FolderModal'
 import RemoveFolderModal from './components/ui/RemoveFolderModal'
+import FolderItem from './components/ui/FolderItem'
 import {
     addFolder,
     editFolder,
@@ -11,6 +12,7 @@ import {
     removeFolder,
     selectFolder,
     setFolderName,
+    setSearch,
     toggleFolderModal,
     toggleRemoveFolderModal
 } from './actions'
@@ -139,3 +141,34 @@ export const RemoveFolderModalContainer = connect(
     })
 )(RemoveFolderModal)
 
+export const FolderItemContainer = connect(
+    state => ({
+        app: state.app,
+        folders: state.folders
+    }),
+    dispatch => ({
+        onClick(id) {
+            dispatch(selectFolder(id))
+            dispatch(setSearch({folderId: id, q: ''}))
+        },
+        onSaveName(name, folder) {
+            const newFolder = {...folder, name: name}
+            const url = `${apiUrl}/directories/${folder.id}`
+
+            fetch(url, {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newFolder)
+            }).then(
+                result => result.json()
+            ).then(
+                result => {
+                    dispatch(editFolder(result))
+                }
+            )
+        }
+    })
+)(FolderItem)
