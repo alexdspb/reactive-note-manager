@@ -12,6 +12,7 @@ import EditNoteButton from './components/ui/EditNoteButton'
 import RemoveNoteButton from './components/ui/RemoveNoteButton'
 import NoteModal from './components/ui/NoteModal'
 import RemoveNoteModal from './components/ui/RemoveNoteModal'
+import SearchForm from './components/ui/SearchForm'
 
 import {
     addFolder,
@@ -329,3 +330,20 @@ export const RemoveNoteModalContainer = connect(
     })
 )(RemoveNoteModal)
 
+export const SearchFormContainer = connect(
+    state => ({
+        app: state.app,
+        notes: state.notes
+    }),
+    dispatch => ({
+        onChange(e, value)  {
+            dispatch(setSearch({q: value, folderId: rootFolderId}))
+        },
+        onAdvancedChange(e)  {
+            dispatch(setSearch({advanced: e.target.checked}))
+        },
+        onSelect(value) {
+            dispatch(setSearch({q: value, folderId: rootFolderId}))
+        }
+    })
+)(SearchForm)

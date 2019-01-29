@@ -1,14 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import MaterialIcon from 'material-icons-react'
 import {setSearch} from "../../actions";
-import {rootFolderId} from "../../constants";
 import Autocomplete from 'react-autocomplete'
 import { Link } from 'react-router-dom'
 
-const SearchForm = props => {
-    const { store } = props
-    const { app, notes } = store.getState()
+const SearchForm = ({app = {}, notes = [], onChange=f=>f, onAdvancedChange=f=>f, onSelect=f=>f}) => {
 
     // fetch suggestions from notes content
     var suggestions = [];
@@ -55,20 +51,22 @@ const SearchForm = props => {
                             <Link to={`/${app.search.advanced ? 'advanced_search' : 'search'}/${item}`} class={'suggestion_link'}>{item}</Link>
                         </div>
                     }
-                    onChange={(e, value) => {
-                        store.dispatch(setSearch({q: value, folderId: rootFolderId}))
-                    }}
-                    onSelect={value => {
-                        store.dispatch(setSearch({q: value, folderId: rootFolderId}))
-                    }}
+                    onChange={onChange}
+                    onSelect={onSelect}
                 />
             </div>
-            <input type={'checkbox'} name={'advanced'} id={'advanced'} onChange={(e) => {
-                store.dispatch(setSearch({advanced: e.target.checked}))
-            }} checked={app.search.advanced}/>
+            <input type={'checkbox'} name={'advanced'} id={'advanced'} onChange={onAdvancedChange} checked={app.search.advanced}/>
             <label htmlFor={'advanced'} data-tip={'Advanced search includes body and tags.'}>use advanced search</label>
         </form>
     )
+}
+
+SearchForm.propTypes = {
+    app: PropTypes.object,
+    notes: PropTypes.array,
+    onChange: PropTypes.func,
+    onAdvancedChange: PropTypes.func,
+    onSelect: PropTypes.func
 }
 
 export default SearchForm
