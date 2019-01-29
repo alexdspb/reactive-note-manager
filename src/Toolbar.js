@@ -13,7 +13,7 @@ import {
 } from './actions'
 import {apiUrl, rootFolderId} from "./constants"
 import { Modal, Button } from 'react-bootstrap'
-import { AddFolderContainer } from './containers'
+import { AddFolderContainer, EditFolderContainer } from './containers'
 
 
 const onFolderModalChange = (e) => {
@@ -143,30 +143,6 @@ const RemoveFolderModal = ({ store }) => {
     )
 }
 
-
-const EditFolderButton = ({store}) => {
-    const { app, folders } = store.getState()
-
-    return (
-        <button
-            id={'edit-button'} className={'toolbar-button'}
-            onClick={() => {
-                if (app.selectedFolderId && app.selectedFolderId !== rootFolderId) {
-                    const [folderToEdit] = folders.filter(item => item.id === app.selectedFolderId)
-                    store.dispatch(loadFolder(folderToEdit))
-                    store.dispatch(toggleFolderModal())
-                } else {
-                    alert('Select a note to edit.');
-                }
-            }}
-            data-tip={'Edit selected folder'}
-        >
-            <div><MaterialIcon icon="edit"/></div>
-            <div>Edit</div>
-        </button>
-    )
-}
-
 const RemoveFolderButton = ({store}) => {
     const { app, folders } = store.getState()
 
@@ -199,7 +175,7 @@ class Toolbar extends Component {
         return (
             <div id={'toolbar'}>
                 <AddFolderContainer />
-                <EditFolderButton store={store} />
+                <EditFolderContainer />
                 <RemoveFolderButton store={store}/>
                 <FolderModal store={store}/>
                 <RemoveFolderModal store={store}/>
