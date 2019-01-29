@@ -108,11 +108,8 @@ class Home extends Component {
 
         return (
             <div>
-                <Toolbar store={this.store} />
-                <Folders
-                    foldersData={folders}
-                    store={this.store}
-                />
+                <Toolbar />
+                <Folders />
                 <Notes store={this.store} notes={notes} />
             </div>
         );
