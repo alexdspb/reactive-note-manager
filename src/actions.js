@@ -34,6 +34,12 @@ export const toggleNoteModal = () => {
     })
 }
 
+export const toggleRemoveNoteModal = () => {
+    return ({
+        type: actionsNames.TOGGLE_REMOVE_NOTE_MODAL,
+    })
+}
+
 export const setSearch = (search) => {
     return ({
         type: actionsNames.SET_SEARCH,

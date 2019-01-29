@@ -12,6 +12,8 @@ export const app = (state = {}, action) => {
             return {...state, showRemoveFolderModal: !state.showRemoveFolderModal}
         case actionsNames.TOGGLE_NOTE_MODAL:
             return {...state, showNoteModal: !state.showNoteModal}
+        case actionsNames.TOGGLE_REMOVE_NOTE_MODAL:
+            return {...state, showRemoveNoteModal: !state.showRemoveNoteModal}
         case actionsNames.SET_SEARCH:
             return {...state, search: {...state.search, ...action.search}}
         default:
