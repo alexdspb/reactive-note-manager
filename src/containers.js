@@ -3,8 +3,18 @@ import AddFolderButton from './components/ui/AddFolderButton'
 import EditFolderButton from './components/ui/EditFolderButton'
 import RemoveFolderButton from './components/ui/RemoveFolderButton'
 import FolderModal from './components/ui/FolderModal'
-import {addFolder, editFolder, loadFolder, setFolderName, toggleFolderModal, toggleRemoveFolderModal} from './actions'
-import {apiUrl} from './constants'
+import RemoveFolderModal from './components/ui/RemoveFolderModal'
+import {
+    addFolder,
+    editFolder,
+    loadFolder,
+    removeFolder,
+    selectFolder,
+    setFolderName,
+    toggleFolderModal,
+    toggleRemoveFolderModal
+} from './actions'
+import {apiUrl, rootFolderId} from './constants'
 
 export const AddFolderContainer = connect(
     state => ({
@@ -92,4 +102,40 @@ export const FolderModalContainer = connect(
         }
     })
 )(FolderModal)
+
+export const RemoveFolderModalContainer = connect(
+    state => ({
+        app: state.app,
+        folder: state.folder
+    }),
+    dispatch => ({
+        onSubmit(folder) {
+
+            if (!folder.id) {
+                return
+            }
+
+            fetch(
+                `${apiUrl}/directories/${folder.id}`,
+                {
+                    method: 'DELETE',
+                    body: JSON.stringify(folder)
+                }
+            ).then(
+                result => {
+                    if (result.ok === true) {
+                        dispatch(removeFolder(folder.id))
+                        dispatch(selectFolder(rootFolderId))
+                    }
+                }
+            )
+            dispatch(loadFolder({}))
+            dispatch(toggleRemoveFolderModal())
+        },
+        onCancel(e) {
+            dispatch(loadFolder({}))
+            dispatch(toggleRemoveFolderModal())
+        }
+    })
+)(RemoveFolderModal)
 
