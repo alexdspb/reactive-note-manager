@@ -13,7 +13,7 @@ import {
 } from './actions'
 import {apiUrl, rootFolderId} from "./constants"
 import { Modal, Button } from 'react-bootstrap'
-import { AddFolderContainer, EditFolderContainer } from './containers'
+import { AddFolderContainer, EditFolderContainer, RemoveFolderContainer } from './containers'
 
 
 const onFolderModalChange = (e) => {
@@ -143,29 +143,6 @@ const RemoveFolderModal = ({ store }) => {
     )
 }
 
-const RemoveFolderButton = ({store}) => {
-    const { app, folders } = store.getState()
-
-    return (
-        <button
-            id={'remove-button'} className={'toolbar-button'}
-            onClick={() => {
-                if (app.selectedFolderId && app.selectedFolderId !== rootFolderId) {
-                    const [folderToRemove] = folders.filter(item => item.id === app.selectedFolderId)
-                    store.dispatch(loadFolder(folderToRemove))
-                    store.dispatch(toggleRemoveFolderModal())
-                } else {
-                    alert('Select a note to edit.');
-                }
-            }}
-            data-tip={'Remove selected folder'}
-        >
-            <div><MaterialIcon icon="remove"/></div>
-            <div>Remove</div>
-        </button>
-    )
-}
-
 
 class Toolbar extends Component {
 
@@ -176,7 +153,7 @@ class Toolbar extends Component {
             <div id={'toolbar'}>
                 <AddFolderContainer />
                 <EditFolderContainer />
-                <RemoveFolderButton store={store}/>
+                <RemoveFolderContainer />
                 <FolderModal store={store}/>
                 <RemoveFolderModal store={store}/>
             </div>
