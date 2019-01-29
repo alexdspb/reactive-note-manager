@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import MaterialIcon from 'material-icons-react'
+import {rootFolderId} from "../../constants";
 
 const EditFolderButton = ({app = {}, folders = [], onEdit=f=>f}) => {
     return (
@@ -8,6 +9,9 @@ const EditFolderButton = ({app = {}, folders = [], onEdit=f=>f}) => {
             id={'edit-button'} className={'toolbar-button'}
             onClick={(e) => {
                 e.preventDefault()
+                if (!app.selectedFolderId || app.selectedFolderId === rootFolderId) {
+                    return
+                }
                 const [folderToEdit] = folders.filter(item => item.id === app.selectedFolderId)
                 onEdit(folderToEdit)
             }}
