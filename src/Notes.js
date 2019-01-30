@@ -1,21 +1,16 @@
 import React from 'react'
 import './notes.css'
-import { Modal, Button } from 'react-bootstrap'
-import NotesList from './NotesList'
-import { Link } from 'react-router-dom'
 import {
     AddNoteContainer,
     EditNoteContainer,
     NoteModalContainer,
     RemoveNoteContainer,
     RemoveNoteModalContainer,
-    SearchFormContainer
+    SearchFormContainer,
+    NotesListContainer
 } from './containers'
-import SearchForm from './components/ui/SearchForm'
 
 const Notes = props => {
-    const { store, notes } = props
-
     return (
         <div id={'notes-area'}>
             <div id={'notes-toolbar'}>
@@ -27,7 +22,7 @@ const Notes = props => {
                 <SearchFormContainer />
             </div>
             <div id={'notes-list'}>
-                <NotesList store={store} notes={notes} />
+                <NotesListContainer />
             </div>
             <NoteModalContainer />
             <RemoveNoteModalContainer />

@@ -9,6 +9,7 @@ const getAllTags = (notes) => {
         if (note.tags && note.tags.length > 0) {
             tags = tags.concat(note.tags)
         }
+        return null
     })
 
     return [...new Set(tags)].map(item => ({label: item, value: item}))

@@ -1,10 +1,8 @@
 import React from 'react'
-import './notes.css'
-import { rootFolderId } from './constants'
-import Note from "./Note"
-import { DragDropContext } from 'react-dnd'
-import HTML5Backend from 'react-dnd-html5-backend'
-
+import '../../notes.css'
+import { rootFolderId } from '../../constants'
+import PropTypes from 'prop-types'
+import {NoteContainer} from '../../containers'
 
 const searchNotes = (notes, params) => {
     let found = notes.sort((a, b) => {
@@ -49,17 +47,19 @@ const searchNotes = (notes, params) => {
     return found
 }
 
-const NotesList = props => {
-    const { store, notes } = props
-    const { app } = store.getState()
-
+const NotesList = ({app = {}, notes = []}) => {
     const foundNotes = searchNotes(notes, app.search)
 
     return (foundNotes.map((note, index) => {
         return (
-            <Note store={store} note={note} key={index} index={index} isSelected={app.selectedNoteId === note.id}/>
+            <NoteContainer note={note} key={index} index={index} isSelected={app.selectedNoteId === note.id}/>
         )
     }))
 }
 
-export default DragDropContext(HTML5Backend)(NotesList)
+NotesList.propTypes = {
+    app: PropTypes.object,
+    notes: PropTypes.array
+}
+
+export default NotesList

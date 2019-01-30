@@ -1,12 +1,6 @@
-import React, {Component} from 'react'
-import Folders from './Folders'
-import Toolbar from "./Toolbar"
-import Notes from "./Notes"
-import {apiUrl, rootFolderId} from './constants'
-import {fetchFolders, fetchNotes, loadNote, selectFolder, selectNote, setSearch, toggleNoteModal} from "./actions";
+import React from 'react'
 import ReactTooltip from 'react-tooltip'
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
-import {folderExist, getNoteById, noteExist} from './utils'
 import {HomeContainer} from "./containers";
 
 

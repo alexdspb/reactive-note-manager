@@ -15,3 +15,19 @@ export const getNoteById = (id, notes) => {
 
 export const noteExist = (id, notes) => (typeof getNoteById(id, notes) === 'object')
 
+
+export const dndNoteSource = {
+    beginDrag(props) {
+        return {
+            id: props.id,
+            index: props.index,
+            note: props.note
+        }
+    }
+}
+
+export const dndNoteTarget = {
+    hover(props, monitor, component) {
+    }
+}
+

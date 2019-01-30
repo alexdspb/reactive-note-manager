@@ -1,6 +1,5 @@
 import React from 'react';
 import './folders.css';
-import {Link} from 'react-router-dom'
 import { FolderItemContainer } from './containers'
 
 const Folders = () => {

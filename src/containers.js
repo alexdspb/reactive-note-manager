@@ -15,6 +15,8 @@ import RemoveNoteButton from './components/ui/RemoveNoteButton'
 import NoteModal from './components/ui/NoteModal'
 import RemoveNoteModal from './components/ui/RemoveNoteModal'
 import SearchForm from './components/ui/SearchForm'
+import NotesList from './components/ui/NotesList'
+import Note from './components/ui/Note'
 
 import {
     addFolder,
@@ -38,8 +40,12 @@ import {
     toggleRemoveFolderModal,
     toggleRemoveNoteModal
 } from './actions'
-import {apiUrl, rootFolderId} from './constants'
-import {folderExist, getNoteById, noteExist} from "./utils";
+import {apiUrl, rootFolderId, dndTypes} from './constants'
+import {folderExist, getNoteById, noteExist, dndNoteSource, dndNoteTarget} from "./utils";
+
+import { DragDropContext } from 'react-dnd'
+import HTML5Backend from 'react-dnd-html5-backend'
+import {DragSource, DropTarget} from 'react-dnd'
 
 export const HomeContainer = connect(
     state => ({
@@ -55,7 +61,6 @@ export const HomeContainer = connect(
                 .then(result => {
                     // select folder that passed through url
                     const folderId = (match.path === '/folder/:id' && match.isExact && folderExist(parseInt(match.params.id, 10), folders)) ? parseInt(match.params.id, 10) : rootFolderId
-                    console.log(folders)
                     dispatch(selectFolder(folderId))
                     dispatch(setSearch({folderId: folderId, q: ''}))
                 })
@@ -394,3 +399,39 @@ export const SearchFormContainer = connect(
         }
     })
 )(SearchForm)
+
+export const NotesListContainer = connect(
+    state => ({
+        app: state.app,
+        notes: state.notes
+    }),
+    null
+)(DragDropContext(HTML5Backend)(NotesList))
+
+export const NoteContainer = connect(
+    null,
+    dispatch => ({
+        onClick(note) {
+            dispatch(selectNote(note.id))
+        },
+        onDoubleClick(note) {
+            dispatch(loadNote(note))
+            dispatch(toggleNoteModal())
+        }
+    })
+)(DropTarget(
+    dndTypes.NOTE,
+    dndNoteTarget,
+    connect => ({
+        connectDropTarget: connect.dropTarget()
+    })
+)(
+    DragSource(
+        dndTypes.NOTE,
+        dndNoteSource,
+        (connect, monitor) => ({
+            connectDragSource: connect.dragSource(),
+            isDragging: monitor.isDragging()
+        })
+    )(Note)
+))

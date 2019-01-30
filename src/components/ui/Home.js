@@ -1,8 +1,5 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import {apiUrl, rootFolderId} from "../../constants";
-import {fetchFolders, fetchNotes, loadNote, selectFolder, selectNote, setSearch, toggleNoteModal} from "../../actions";
-import {folderExist, getNoteById, noteExist} from "../../utils";
 import Toolbar from "../../Toolbar";
 import Folders from "../../Folders";
 import Notes from "../../Notes";
@@ -19,6 +16,7 @@ class Home extends Component {
             <div>
                 <Toolbar />
                 <Folders />
+                <Notes />
             </div>
         );
     }

@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {setSearch} from "../../actions";
 import Autocomplete from 'react-autocomplete'
 import { Link } from 'react-router-dom'
 
