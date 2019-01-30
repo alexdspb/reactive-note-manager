@@ -146,28 +146,39 @@ export const FolderModalContainer = connect(
                     console.log({[name]: value})
             }
         },
-        onSubmit(folder) {
+        async onSubmit(folder) {
 
             if (!folder.name || folder.name === '') {
                 return
             }
 
-            const url = folder.id ? `${apiUrl}/directories/${folder.id}` : `${apiUrl}/directories`
-            fetch(url, {
-                method: folder.id ? 'PUT' : 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(folder)
-            }).then(
-                result => result.json()
-            ).then(
-                result => {
-                    const action = folder.id ? editFolder(result) : addFolder(result)
-                    dispatch(action)
+
+            try {
+                const request = folder.id ? {
+                    url: `${apiUrl}/directories/${folder.id}`,
+                    method: 'put',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    data: folder
+                } : {
+                    url: `${apiUrl}/directories`,
+                    method: 'post',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    data: folder
                 }
-            )
+                const response = await axios.request(request)
+
+                const action = folder.id ? editFolder(response.data) : addFolder(response.data)
+                dispatch(action)
+            } catch (error) {
+                console.error(error)
+            }
+
             dispatch(loadFolder({}))
             dispatch(toggleFolderModal())
         },
@@ -184,26 +195,30 @@ export const RemoveFolderModalContainer = connect(
         folder: state.folder
     }),
     dispatch => ({
-        onSubmit(folder) {
+        async onSubmit(folder) {
 
             if (!folder.id) {
                 return
             }
 
-            fetch(
-                `${apiUrl}/directories/${folder.id}`,
-                {
-                    method: 'DELETE',
-                    body: JSON.stringify(folder)
+            try {
+                const request = {
+                    url: `${apiUrl}/directories/${folder.id}`,
+                    method: 'delete',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    data: folder
                 }
-            ).then(
-                result => {
-                    if (result.ok === true) {
-                        dispatch(removeFolder(folder.id))
-                        dispatch(selectFolder(rootFolderId))
-                    }
-                }
-            )
+                const response = await axios.request(request)
+
+                dispatch(removeFolder(folder.id))
+                dispatch(selectFolder(rootFolderId))
+            } catch (error) {
+                console.error(error)
+            }
+
             dispatch(loadFolder({}))
             dispatch(toggleRemoveFolderModal())
         },
@@ -224,24 +239,23 @@ export const FolderItemContainer = connect(
             dispatch(selectFolder(id))
             dispatch(setSearch({folderId: id, q: ''}))
         },
-        onSaveName(name, folder) {
-            const newFolder = {...folder, name: name}
-            const url = `${apiUrl}/directories/${folder.id}`
-
-            fetch(url, {
-                method: 'PUT',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(newFolder)
-            }).then(
-                result => result.json()
-            ).then(
-                result => {
-                    dispatch(editFolder(result))
+        async onSaveName(name, folder) {
+            try {
+                const request = {
+                    url: `${apiUrl}/directories/${folder.id}`,
+                    method: 'put',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    data: {...folder, name: name}
                 }
-            )
+                const response = await axios.request(request)
+
+                dispatch(editFolder(response.data))
+            } catch (error) {
+                console.error(error)
+            }
         }
     })
 )(FolderItem)
@@ -300,7 +314,7 @@ export const NoteModalContainer = connect(
             const reducedTags = tags.map(item => item.value)
             dispatch(setNoteTags(reducedTags))
         },
-        onSubmit(note) {
+        async onSubmit(note) {
             if (!note.title) {
                 return
             }
@@ -308,22 +322,32 @@ export const NoteModalContainer = connect(
                 return
             }
 
-            const url = note.id ? `${apiUrl}/notices/${note.id}` : `${apiUrl}/notices`
-            fetch(url, {
-                method: note.id ? 'PUT' : 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(note)
-            }).then(
-                result => result.json()
-            ).then(
-                result => {
-                    const action = note.id ? editNote(result) : addNote(result)
-                    dispatch(action)
+            try {
+                const request = note.id ? {
+                    url: `${apiUrl}/notices/${note.id}`,
+                    method: 'put',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    data: note
+                } : {
+                    url: `${apiUrl}/notices`,
+                    method: 'post',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    data: note
                 }
-            )
+                const response = await axios.request(request)
+
+                const action = note.id ? editNote(response.data) : addNote(response.data)
+                dispatch(action)
+            } catch (error) {
+                console.error(error)
+            }
+
             dispatch(toggleNoteModal())
             dispatch(loadNote({}))
         },
@@ -353,26 +377,30 @@ export const RemoveNoteModalContainer = connect(
         note: state.note
     }),
     dispatch => ({
-        onSubmit(note) {
+        async onSubmit(note) {
 
             if (!note.id) {
                 return
             }
 
-            fetch(
-                `${apiUrl}/notices/${note.id}`,
-                {
-                    method: 'DELETE',
-                    body: JSON.stringify(note)
+            try {
+                const request = {
+                    url: `${apiUrl}/notices/${note.id}`,
+                    method: 'delete',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    data: note
                 }
-            ).then(
-                result => {
-                    if (result.ok === true) {
-                        dispatch(removeNote(note.id))
-                        dispatch(selectNote(0))
-                    }
-                }
-            )
+                const response = await axios.request(request)
+
+                dispatch(removeNote(note.id))
+                dispatch(selectNote(0))
+            } catch (error) {
+                console.error(error)
+            }
+
             dispatch(loadNote({}))
             dispatch(toggleRemoveNoteModal())
         },
