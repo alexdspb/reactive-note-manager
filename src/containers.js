@@ -46,6 +46,7 @@ import {folderExist, getNoteById, noteExist, dndNoteSource, dndNoteTarget} from 
 import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 import {DragSource, DropTarget} from 'react-dnd'
+import axios from 'axios'
 
 export const HomeContainer = connect(
     state => ({
@@ -54,38 +55,38 @@ export const HomeContainer = connect(
         notes: state.notes
     }),
     dispatch => ({
-        onDidMount(match, folders, notes) {
-            fetch(`${apiUrl}/directories`)
-                .then(result => result.json())
-                .then(result => dispatch(fetchFolders(result)))
-                .then(result => {
-                    // select folder that passed through url
-                    const folderId = (match.path === '/folder/:id' && match.isExact && folderExist(parseInt(match.params.id, 10), folders)) ? parseInt(match.params.id, 10) : rootFolderId
-                    dispatch(selectFolder(folderId))
-                    dispatch(setSearch({folderId: folderId, q: ''}))
-                })
-            fetch(`${apiUrl}/notices`)
-                .then(result => result.json())
-                .then(result => {
-                    dispatch(fetchNotes(result))
-                })
-                .then(result => {
-                    // select and edit the note that passed through url
-                    if (match.path === '/note/:id' && match.isExact && noteExist(parseInt(match.params.id, 10), notes)) {
-                        const noteId = parseInt(match.params.id, 10)
-                        dispatch(selectNote(noteId))
-                        // show edit modal dialog
-                        const note = getNoteById(noteId, notes)
-                        dispatch(loadNote(note))
-                        dispatch(toggleNoteModal())
-                    }
-                    // search notes by the query that passed through url
-                    if (match.path === '/search/:q' && match.isExact) {
-                        dispatch(setSearch({q: match.params.q}))
-                    } else if (match.path === '/advanced_search/:q' && match.isExact) {
-                        dispatch(setSearch({q: match.params.q, advanced: true}))
-                    }
-                })
+        async onDidMount(match, folders, notes) {
+            try {
+                const response = await axios.get(`${apiUrl}/directories`)
+                dispatch(fetchFolders(response.data))
+                // select folder that passed through url
+                const folderId = (match.path === '/folder/:id' && match.isExact && folderExist(parseInt(match.params.id, 10), response.data)) ? parseInt(match.params.id, 10) : rootFolderId
+                dispatch(selectFolder(folderId))
+                dispatch(setSearch({folderId: folderId, q: ''}))
+            } catch (error) {
+                console.error(error)
+            }
+            try {
+                const response = await axios.get(`${apiUrl}/notices`)
+                dispatch(fetchNotes(response.data))
+                // select and edit the note that passed through url
+                if (match.path === '/note/:id' && match.isExact && noteExist(parseInt(match.params.id, 10), response.data)) {
+                    const noteId = parseInt(match.params.id, 10)
+                    dispatch(selectNote(noteId))
+                    // show edit modal dialog
+                    const note = getNoteById(noteId, response.data)
+                    dispatch(loadNote(note))
+                    dispatch(toggleNoteModal())
+                }
+                // search notes by the query that passed through url
+                if (match.path === '/search/:q' && match.isExact) {
+                    dispatch(setSearch({q: match.params.q}))
+                } else if (match.path === '/advanced_search/:q' && match.isExact) {
+                    dispatch(setSearch({q: match.params.q, advanced: true}))
+                }
+            } catch (error) {
+                console.error(error)
+            }
         }
     })
 )(Home)
