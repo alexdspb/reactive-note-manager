@@ -14,15 +14,20 @@ class Note extends Component {
 
         return connectDragSource(
             connectDropTarget(
-                <div id={`note-${note.id}`} className={noteClass} onClick={(e) => onClick(note)} data-id={note.id}>
+                <div
+                    id={`note-${note.id}`}
+                    className={noteClass}
+                    onClick={(e) => onClick(note)}
+                    onDoubleClick={(e) => onDoubleClick(note)}
+                    data-id={note.id}
+                    data-tip={'Click selects note; Double click edits note.'}
+                >
+                    <ReactTooltip/>
                     <Link to={`/note/${note.id}`}>
-                        <div className={'note-icon'} data-id={note.id}
-                             data-tip={'Select a note you want to edit or remove.'}
-                             onDoubleClick={(e) => onDoubleClick(note)}
-                        >
+                        <div className={'note-icon'} data-id={note.id} data-tip={''}>
                             <MaterialIcon icon={'note'} data-id={note.id}/>
                         </div>
-                        <div className={'note-title'} data-id={note.id} title={note.title}>
+                        <div className={'note-title'} data-id={note.id} title={note.title} data-tip={''}>
                             {note.title}
                         </div>
                     </Link>
