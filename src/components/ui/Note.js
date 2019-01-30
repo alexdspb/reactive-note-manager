@@ -3,6 +3,7 @@ import '../../notes.css'
 import MaterialIcon from 'material-icons-react'
 import ReactTooltip from 'react-tooltip'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 
 
 class Note extends Component {
@@ -14,16 +15,17 @@ class Note extends Component {
         return connectDragSource(
             connectDropTarget(
                 <div id={`note-${note.id}`} className={noteClass} onClick={(e) => onClick(note)} data-id={note.id}>
-                    <ReactTooltip/>
-                    <div className={'note-icon'} data-id={note.id}
-                         data-tip={'Select a note you want to edit or remove.'}
-                         onDoubleClick={(e) => onDoubleClick(note)}
-                    >
-                        <MaterialIcon icon={'note'} data-id={note.id}/>
-                    </div>
-                    <div className={'note-title'} data-id={note.id} data-tip={note.title}>
-                        {note.title}
-                    </div>
+                    <Link to={`/note/${note.id}`}>
+                        <div className={'note-icon'} data-id={note.id}
+                             data-tip={'Select a note you want to edit or remove.'}
+                             onDoubleClick={(e) => onDoubleClick(note)}
+                        >
+                            <MaterialIcon icon={'note'} data-id={note.id}/>
+                        </div>
+                        <div className={'note-title'} data-id={note.id} title={note.title}>
+                            {note.title}
+                        </div>
+                    </Link>
                 </div>
             )
         )
