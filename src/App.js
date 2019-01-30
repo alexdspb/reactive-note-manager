@@ -7,6 +7,7 @@ import {fetchFolders, fetchNotes, loadNote, selectFolder, selectNote, setSearch,
 import ReactTooltip from 'react-tooltip'
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
 import {folderExist, getNoteById, noteExist} from './utils'
+import {HomeContainer} from "./containers";
 
 
 const Error404 = ({location}) => {
@@ -31,11 +32,11 @@ export const AppRouter = props => {
     return (
         <Router>
             <Switch>
-                <Route exact path={'/'} component={Home} />
-                <Route path={'/folder/:id'} component={Home} />
-                <Route path={'/note/:id'} component={Home} />
-                <Route path={'/search/:q'} component={Home} />
-                <Route path={'/advanced_search/:q'} component={Home} />
+                <Route exact path={'/'} component={HomeContainer} />
+                <Route path={'/folder/:id'} component={HomeContainer} />
+                <Route path={'/note/:id'} component={HomeContainer} />
+                <Route path={'/search/:q'} component={HomeContainer} />
+                <Route path={'/advanced_search/:q'} component={HomeContainer} />
                 <Route component={Error404} />
             </Switch>
         </Router>
@@ -53,67 +54,6 @@ export const AppWrapper = ({children}) => {
             <div id={'app-footer'}>&nbsp;</div>
         </div>
     )
-}
-
-class Home extends Component {
-    store = {}
-
-    constructor (props) {
-        super(props)
-        this.store = window.store
-    }
-
-    componentDidMount() {
-
-
-        fetch(`${apiUrl}/directories`)
-            .then(result => result.json())
-            .then(result => this.store.dispatch(fetchFolders(result)))
-            .then(result => {
-                const {folders} = this.store.getState()
-                const {match} = this.props
-                // select folder that passed through url
-                const folderId = (match.path === '/folder/:id' && match.isExact && folderExist(parseInt(match.params.id, 10), folders)) ? parseInt(match.params.id, 10) : rootFolderId
-                this.store.dispatch(selectFolder(folderId))
-                this.store.dispatch(setSearch({folderId: folderId, q: ''}))
-            })
-        fetch(`${apiUrl}/notices`)
-            .then(result => result.json())
-            .then(result => {
-                this.store.dispatch(fetchNotes(result))
-            })
-            .then(result => {
-                const {notes} = this.store.getState()
-                const {match} = this.props
-                // select and edit the note that passed through url
-                if (match.path === '/note/:id' && match.isExact && noteExist(parseInt(match.params.id, 10), notes)) {
-                    const noteId = parseInt(match.params.id, 10)
-                    this.store.dispatch(selectNote(noteId))
-                    // show edit modal dialog
-                    const note = getNoteById(noteId, notes)
-                    this.store.dispatch(loadNote(note))
-                    this.store.dispatch(toggleNoteModal())
-                }
-                // search notes by the query that passed through url
-                if (match.path === '/search/:q' && match.isExact) {
-                    this.store.dispatch(setSearch({q: match.params.q}))
-                } else if (match.path === '/advanced_search/:q' && match.isExact) {
-                    this.store.dispatch(setSearch({q: match.params.q, advanced: true}))
-                }
-            })
-    }
-
-    render() {
-        const { folders, notes } = this.store.getState()
-
-        return (
-            <div>
-                <Toolbar />
-                <Folders />
-                <Notes store={this.store} notes={notes} />
-            </div>
-        );
-    }
 }
 
 export default AppRouter

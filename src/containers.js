@@ -1,5 +1,7 @@
 import { connect } from 'react-redux'
 
+import Home from './components/ui/Home'
+
 import AddFolderButton from './components/ui/AddFolderButton'
 import EditFolderButton from './components/ui/EditFolderButton'
 import RemoveFolderButton from './components/ui/RemoveFolderButton'
@@ -18,7 +20,7 @@ import {
     addFolder,
     addNote,
     editFolder,
-    editNote,
+    editNote, fetchFolders, fetchNotes,
     loadFolder,
     loadNote,
     removeFolder,
@@ -37,6 +39,51 @@ import {
     toggleRemoveNoteModal
 } from './actions'
 import {apiUrl, rootFolderId} from './constants'
+import {folderExist, getNoteById, noteExist} from "./utils";
+
+export const HomeContainer = connect(
+    state => ({
+        app: state.app,
+        folders: state.folders,
+        notes: state.notes
+    }),
+    dispatch => ({
+        onDidMount(match, folders, notes) {
+            fetch(`${apiUrl}/directories`)
+                .then(result => result.json())
+                .then(result => dispatch(fetchFolders(result)))
+                .then(result => {
+                    // select folder that passed through url
+                    const folderId = (match.path === '/folder/:id' && match.isExact && folderExist(parseInt(match.params.id, 10), folders)) ? parseInt(match.params.id, 10) : rootFolderId
+                    console.log(folders)
+                    dispatch(selectFolder(folderId))
+                    dispatch(setSearch({folderId: folderId, q: ''}))
+                })
+            fetch(`${apiUrl}/notices`)
+                .then(result => result.json())
+                .then(result => {
+                    dispatch(fetchNotes(result))
+                })
+                .then(result => {
+                    // select and edit the note that passed through url
+                    if (match.path === '/note/:id' && match.isExact && noteExist(parseInt(match.params.id, 10), notes)) {
+                        const noteId = parseInt(match.params.id, 10)
+                        dispatch(selectNote(noteId))
+                        // show edit modal dialog
+                        const note = getNoteById(noteId, notes)
+                        dispatch(loadNote(note))
+                        dispatch(toggleNoteModal())
+                    }
+                    // search notes by the query that passed through url
+                    if (match.path === '/search/:q' && match.isExact) {
+                        dispatch(setSearch({q: match.params.q}))
+                    } else if (match.path === '/advanced_search/:q' && match.isExact) {
+                        dispatch(setSearch({q: match.params.q, advanced: true}))
+                    }
+                })
+        }
+    })
+)(Home)
 
 export const AddFolderContainer = connect(
     state => ({
