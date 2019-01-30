@@ -9,7 +9,6 @@ import { initialState, reduxDevTools } from "./constants";
 import { Provider } from 'react-redux'
 
 const store = createStore(combineReducers({app, folders, notes, folder, note}), initialState, reduxDevTools)
-window.store = store
 
 const render = () => {
     ReactDOM.render(
