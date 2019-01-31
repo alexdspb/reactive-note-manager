@@ -64,7 +64,7 @@ textarea {
 }
 
 .note-item.dragging {
-    opacity: .5;
+    opacity: 0.1;
 }
 
 .note-title {

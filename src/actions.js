@@ -47,6 +47,13 @@ export const setSearch = (search) => {
     })
 }
 
+export const dragNote = (id = 0) => {
+    return ({
+        type: actionsNames.DRAG_NOTE,
+        id
+    })
+}
+
 /* folders */
 
 export const fetchFolders = foldersData => {
@@ -112,6 +119,13 @@ export const changeNotePosition = (id, position) => {
         type: actionsNames.CHANGE_NOTE_POSITION,
         id,
         position
+    })
+}
+
+export const reorderNotes = notes => {
+    return ({
+        type: actionsNames.REORDER_NOTES,
+        notes
     })
 }
 

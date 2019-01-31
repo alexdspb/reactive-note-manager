@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Component} from 'react'
 import '../../notes.css'
 import { rootFolderId } from '../../constants'
 import PropTypes from 'prop-types'
@@ -14,7 +14,6 @@ const searchNotes = (notes, params) => {
             return 0
         }
     })
-
 
     if (!params) {
         return found
@@ -47,19 +46,44 @@ const searchNotes = (notes, params) => {
     return found
 }
 
-const NotesList = ({app = {}, notes = []}) => {
-    const foundNotes = searchNotes(notes, app.search)
+class NotesList extends Component {
 
-    return (foundNotes.map((note, index) => {
-        return (
-            <NoteContainer note={note} key={index} index={index} isSelected={app.selectedNoteId === note.id}/>
-        )
-    }))
+    moveNote = (dragIndex, hoverIndex) => {
+        const { notes, onReorder=f=>f } = this.props
+        const dragNote = notes[dragIndex]
+
+        const withoutDraggable = [...notes.slice(0, dragIndex), ...notes.slice(dragIndex + 1)]
+        const insertDraggable = [
+            ...withoutDraggable.slice(0, hoverIndex),
+            dragNote,
+            ...withoutDraggable.slice(hoverIndex)
+        ]
+
+        // update position property that used for sorting
+        const positioned = insertDraggable.map((item, index) => ({...item, position: index}))
+        onReorder(positioned)
+
+        // TODO !!!
+        // ajax action here to inform server about new order
+    }
+
+    render() {
+        const { app, notes } = this.props
+        const foundNotes = searchNotes(notes, app.search)
+
+
+        return (foundNotes.map((note, index) => {
+            return (
+                <NoteContainer note={note} key={index} index={index} isSelected={app.selectedNoteId === note.id} id={note.id} moveNote={this.moveNote}/>
+            )
+        }))
+    }
 }
 
 NotesList.propTypes = {
     app: PropTypes.object,
-    notes: PropTypes.array
+    notes: PropTypes.array,
+    moveNote: PropTypes.func
 }
 
 export default NotesList

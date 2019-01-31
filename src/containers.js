@@ -16,13 +16,16 @@ import NoteModal from './components/ui/NoteModal'
 import RemoveNoteModal from './components/ui/RemoveNoteModal'
 import SearchForm from './components/ui/SearchForm'
 import NotesList from './components/ui/NotesList'
-import Note from './components/ui/Note'
+import Note, {dndNoteSource, dndNoteTarget} from './components/ui/Note'
 
 import {
     addFolder,
     addNote,
     editFolder,
-    editNote, fetchFolders, fetchNotes,
+    editNote,
+    fetchFolders,
+    fetchNotes,
+    reorderNotes,
     loadFolder,
     loadNote,
     removeFolder,
@@ -38,15 +41,16 @@ import {
     toggleFolderModal,
     toggleNoteModal,
     toggleRemoveFolderModal,
-    toggleRemoveNoteModal
+    toggleRemoveNoteModal, dragNote
 } from './actions'
 import {apiUrl, rootFolderId, dndTypes} from './constants'
-import {folderExist, getNoteById, noteExist, dndNoteSource, dndNoteTarget} from "./utils";
+import {folderExist, getNoteById, noteExist} from "./utils";
 
 import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 import {DragSource, DropTarget} from 'react-dnd'
 import axios from 'axios'
+import { findDOMNode } from 'react-dom'
 
 export const HomeContainer = connect(
     state => ({
@@ -434,11 +438,18 @@ export const NotesListContainer = connect(
         app: state.app,
         notes: state.notes
     }),
-    null
+    dispatch => ({
+        onReorder(notes) {
+            dispatch(reorderNotes(notes))
+        }
+    })
 )(DragDropContext(HTML5Backend)(NotesList))
 
 export const NoteContainer = connect(
-    null,
+    state => ({
+        app: state.app,
+        notes: state.notes
+    }),
     dispatch => ({
         onClick(note) {
             dispatch(selectNote(note.id))
@@ -446,6 +457,28 @@ export const NoteContainer = connect(
         onDoubleClick(note) {
             dispatch(loadNote(note))
             dispatch(toggleNoteModal())
+        },
+        onDragStart(id) {
+            dispatch(dragNote(id))
+        },
+        onDragEnd(notes) {
+            for (const note of notes) {
+                try {
+                    const request = {
+                        url: `${apiUrl}/notices/${note.id}`,
+                        method: 'put',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        data: note
+                    }
+                    const response = axios.request(request)
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+            dispatch(dragNote())
         }
     })
 )(DropTarget(

@@ -16,6 +16,8 @@ export const app = (state = {}, action) => {
             return {...state, showRemoveNoteModal: !state.showRemoveNoteModal}
         case actionsNames.SET_SEARCH:
             return {...state, search: {...state.search, ...action.search}}
+        case actionsNames.DRAG_NOTE:
+            return {...state, dragNoteId: action.id}
         default:
             return state
     }
@@ -62,6 +64,8 @@ export const notes = (state = [], action) => {
             return [...state].map(
                 (item) => item.id === action.id ? {...item, position: action.position} : item
             )
+        case actionsNames.REORDER_NOTES:
+            return action.notes
         default:
             return state
     }
