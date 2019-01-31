@@ -36,7 +36,6 @@ export const actionsNames = {
     ADD_NOTE: 'ADD_NOTE',
     EDIT_NOTE: 'EDIT_NOTE',
     REMOVE_NOTE: 'REMOVE_NOTE',
-    CHANGE_NOTE_POSITION: 'CHANGE_NOTE_POSITION',
     REORDER_NOTES: 'REORDER_NOTES',
 
     // folder

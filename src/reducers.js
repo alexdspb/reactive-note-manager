@@ -34,11 +34,11 @@ export const folders = (state = [], action) => {
                 // do not edit incomplete folders or root folder
                 return state
             }
-            return [...state].map(
+            return state.map(
                 (item) => item.id === action.folder.id ? {id: item.id, parentId: action.folder.parentId, name: action.folder.name} : item
             )
         case actionsNames.REMOVE_FOLDER:
-            return [...state].filter(item => item.id !== action.id)
+            return state.filter(item => item.id !== action.id)
         default:
             return state
     }
@@ -53,17 +53,13 @@ export const notes = (state = [], action) => {
             return [...state, action.note]
         case actionsNames.EDIT_NOTE:
             if (action.note.id  && action.note.directoryId && action.note.title) {
-                return [...state].map(
+                return state.map(
                     (item) => item.id === action.note.id ? {...item, ...action.note} : item
                 )
             }
             return state
         case actionsNames.REMOVE_NOTE:
-            return [...state].filter(item => item.id !== action.id)
-        case actionsNames.CHANGE_NOTE_POSITION:
-            return [...state].map(
-                (item) => item.id === action.id ? {...item, position: action.position} : item
-            )
+            return state.filter(item => item.id !== action.id)
         case actionsNames.REORDER_NOTES:
             return action.notes
         default:

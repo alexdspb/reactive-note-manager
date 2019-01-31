@@ -50,7 +50,6 @@ import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 import {DragSource, DropTarget} from 'react-dnd'
 import axios from 'axios'
-import { findDOMNode } from 'react-dom'
 
 export const HomeContainer = connect(
     state => ({

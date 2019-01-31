@@ -1,20 +1,8 @@
 import React, {Component} from 'react'
 import '../../notes.css'
 import MaterialIcon from 'material-icons-react'
-import ReactTooltip from 'react-tooltip'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import {
-    DragSource,
-    DropTarget,
-    ConnectDropTarget,
-    ConnectDragSource,
-    DropTargetMonitor,
-    DropTargetConnector,
-    DragSourceConnector,
-    DragSourceMonitor,
-} from 'react-dnd'
-import {findDOMNode} from "react-dom";
 
 export const dndNoteSource = {
     beginDrag(props) {
@@ -38,35 +26,6 @@ export const dndNoteTarget = {
             return
         }
 
-        // Determine rectangle on screen
-        const hoverBoundingRect = findDOMNode(
-            component,
-        ).getBoundingClientRect()
-
-        // Get vertical middle
-        const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
-
-        // Determine mouse position
-        const clientOffset = monitor.getClientOffset()
-
-        // Get pixels to the top
-        const hoverClientY = clientOffset.y - hoverBoundingRect.top
-
-        // Only perform the move when the mouse has crossed half of the items height
-        // When dragging downwards, only move when the cursor is below 50%
-        // When dragging upwards, only move when the cursor is above 50%
-
-        // No restrictions for wide space dragging
-        // // Dragging downwards
-        // if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
-        //   return
-        // }
-        //
-        // // Dragging upwards
-        // if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
-        //   return
-        // }
-
         // Time to actually perform the action
         props.moveNote(dragIndex, hoverIndex)
 
@@ -79,7 +38,7 @@ export const dndNoteTarget = {
 }
 class Note extends Component {
     render() {
-        const { app, note, notes, isSelected, isDragging, connectDragSource, connectDropTarget,
+        const { app, note, notes, isSelected, connectDragSource, connectDropTarget,
             onClick=f=>f, onDoubleClick=f=>f, onDragStart=f=>f, onDragEnd=f=>f } = this.props
         const noteClass = `note-item ${isSelected ? 'selected' : ''} ${note.id === app.dragNoteId ? 'dragging' : ''}`
 

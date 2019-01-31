@@ -114,14 +114,6 @@ export const removeNote = id => {
     })
 }
 
-export const changeNotePosition = (id, position) => {
-    return ({
-        type: actionsNames.CHANGE_NOTE_POSITION,
-        id,
-        position
-    })
-}
-
 export const reorderNotes = notes => {
     return ({
         type: actionsNames.REORDER_NOTES,
