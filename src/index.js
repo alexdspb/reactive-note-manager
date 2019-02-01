@@ -3,12 +3,10 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import {AppWrapper, AppRouter} from './App';
 import * as serviceWorker from './serviceWorker';
-import { createStore, combineReducers } from 'redux'
-import { app, folders, notes, folder, note } from './reducers'
-import { initialState, reduxDevTools } from "./constants";
 import { Provider } from 'react-redux'
+import storeFactory from './store'
 
-const store = createStore(combineReducers({app, folders, notes, folder, note}), initialState, reduxDevTools)
+const store = storeFactory()
 
 const render = () => {
     ReactDOM.render(
