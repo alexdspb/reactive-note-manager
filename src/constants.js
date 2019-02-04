@@ -1,5 +1,4 @@
-
-export const apiUrl = 'http://192.168.56.101:3001'
+export const apiUrl = `http://localhost:3000`;
 
 export const initialState = {
     app: {
