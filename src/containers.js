@@ -24,7 +24,7 @@ import {
     editFolder,
     editNote,
     requestFolders,
-    fetchNotes,
+    requestNotes,
     reorderNotes,
     loadFolder,
     loadNote,
@@ -60,26 +60,12 @@ export const HomeContainer = connect(
     dispatch => ({
         async onDidMount(match, notes) {
             dispatch(requestFolders(match))
-            try {
-                const response = await axios.get(`${apiUrl}/notices`)
-                dispatch(fetchNotes(response.data))
-                // select and edit the note that passed through url
-                if (match.path === '/note/:id' && match.isExact && noteExist(parseInt(match.params.id, 10), response.data)) {
-                    const noteId = parseInt(match.params.id, 10)
-                    dispatch(selectNote(noteId))
-                    // show edit modal dialog
-                    const note = getNoteById(noteId, response.data)
-                    dispatch(loadNote(note))
-                    dispatch(toggleNoteModal())
-                }
-                // search notes by the query that passed through url
-                if (match.path === '/search/:q' && match.isExact) {
-                    dispatch(setSearch({q: match.params.q}))
-                } else if (match.path === '/advanced_search/:q' && match.isExact) {
-                    dispatch(setSearch({q: match.params.q, advanced: true}))
-                }
-            } catch (error) {
-                console.error(error)
+            dispatch(requestNotes(match))
+            // search notes by the query that passed through url
+            if (match.path === '/search/:q' && match.isExact) {
+                dispatch(setSearch({q: match.params.q}))
+            } else if (match.path === '/advanced_search/:q' && match.isExact) {
+                dispatch(setSearch({q: match.params.q, advanced: true}))
             }
         }
     })

@@ -1,5 +1,5 @@
 import {actionsNames, apiUrl, rootFolderId} from './constants'
-import {folderExist, getRequest} from './utils'
+import {folderExist, getNoteById, getRequest, noteExist} from './utils'
 
 /* app */
 
@@ -100,6 +100,25 @@ export const removeFolder = id => {
 }
 
 /* notes */
+
+export const requestNotes = (match) => {
+    return (dispatch) => {
+        return getRequest(`${apiUrl}/notices`).then(
+            response => {
+                dispatch(fetchNotes(response.data))
+                // select and edit the note that passed through url
+                if (match.path === '/note/:id' && match.isExact && noteExist(parseInt(match.params.id, 10), response.data)) {
+                    const noteId = parseInt(match.params.id, 10)
+                    dispatch(selectNote(noteId))
+                    // show edit modal dialog
+                    const note = getNoteById(noteId, response.data)
+                    dispatch(loadNote(note))
+                    dispatch(toggleNoteModal())
+                }
+            }
+        )
+    }
+}
 
 export const fetchNotes = notes => {
     return ({
