@@ -1,3 +1,4 @@
+import axios from 'axios'
 
 
 export const getFolderById = (id, folders) => {
@@ -16,3 +17,15 @@ export const getNoteById = (id, notes) => {
 export const noteExist = (id, notes) => (typeof getNoteById(id, notes) === 'object')
 
 
+export const getRequest = (url, params = {}) => {
+    const request = {
+        url,
+        method: 'get',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        params
+    }
+    return axios.request(request)
+}

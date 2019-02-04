@@ -1,4 +1,5 @@
-import { actionsNames } from './constants'
+import {actionsNames, apiUrl, rootFolderId} from './constants'
+import {folderExist, getRequest} from './utils'
 
 /* app */
 
@@ -55,6 +56,20 @@ export const dragNote = (id = 0) => {
 }
 
 /* folders */
+
+export const requestFolders = (match) => {
+    return (dispatch) => {
+        return getRequest(`${apiUrl}/directories`).then(
+            response => {
+                dispatch(fetchFolders(response.data))
+                // select folder that passed through url
+                const folderId = (match.path === '/folder/:id' && match.isExact && folderExist(parseInt(match.params.id, 10), response.data)) ? parseInt(match.params.id, 10) : rootFolderId
+                dispatch(selectFolder(folderId))
+                dispatch(setSearch({folderId: folderId, q: ''}))
+            }
+        )
+    }
+}
 
 export const fetchFolders = foldersData => {
     return ({

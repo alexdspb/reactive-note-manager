@@ -23,7 +23,7 @@ import {
     addNote,
     editFolder,
     editNote,
-    fetchFolders,
+    requestFolders,
     fetchNotes,
     reorderNotes,
     loadFolder,
@@ -44,7 +44,7 @@ import {
     toggleRemoveNoteModal, dragNote
 } from './actions'
 import {apiUrl, rootFolderId, dndTypes} from './constants'
-import {folderExist, getNoteById, noteExist} from "./utils";
+import {getNoteById, noteExist} from "./utils";
 
 import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
@@ -58,17 +58,8 @@ export const HomeContainer = connect(
         notes: state.notes
     }),
     dispatch => ({
-        async onDidMount(match, folders, notes) {
-            try {
-                const response = await axios.get(`${apiUrl}/directories`)
-                dispatch(fetchFolders(response.data))
-                // select folder that passed through url
-                const folderId = (match.path === '/folder/:id' && match.isExact && folderExist(parseInt(match.params.id, 10), response.data)) ? parseInt(match.params.id, 10) : rootFolderId
-                dispatch(selectFolder(folderId))
-                dispatch(setSearch({folderId: folderId, q: ''}))
-            } catch (error) {
-                console.error(error)
-            }
+        async onDidMount(match, notes) {
+            dispatch(requestFolders(match))
             try {
                 const response = await axios.get(`${apiUrl}/notices`)
                 dispatch(fetchNotes(response.data))
