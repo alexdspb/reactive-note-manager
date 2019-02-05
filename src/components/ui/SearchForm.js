@@ -11,22 +11,22 @@ const SearchForm = ({app = {}, notes = [], onChange=f=>f, onAdvancedChange=f=>f,
         if (note.title) {
             note.title.split(' ').map((word) => {
                 const cleanWord =  word.replace(/[\.,\?\!]+$/g, '').toLowerCase()
-                if (cleanWord.length > 3) {
+                if (cleanWord.length > 0) {
                     suggestions = suggestions.concat([cleanWord])
                 }
                 return null
             })
         }
-        if (note.description) {
+        if (app.search.advanced && note.description) {
             note.description.split(' ').map((word) => {
                 const cleanWord =  word.replace(/[\.,\?\!]+$/g, '').toLowerCase()
-                if (cleanWord.length > 3) {
+                if (cleanWord.length > 0) {
                     suggestions = suggestions.concat([cleanWord])
                 }
                 return null
             })
         }
-        if (note.tags && note.tags.length > 0) {
+        if (app.search.advanced && note.tags && note.tags.length > 0) {
             suggestions = suggestions.concat(note.tags)
         }
         return null
