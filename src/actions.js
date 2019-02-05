@@ -63,9 +63,11 @@ export const requestFolders = (match) => {
             response => {
                 dispatch(fetchFolders(response.data))
                 // select folder that passed through url
-                const folderId = (match.path === '/folder/:id' && match.isExact && folderExist(parseInt(match.params.id, 10), response.data)) ? parseInt(match.params.id, 10) : rootFolderId
-                dispatch(selectFolder(folderId))
-                dispatch(setSearch({folderId: folderId, q: ''}))
+                const folderId = (match.path === '/folder/:id' && match.isExact && folderExist(parseInt(match.params.id, 10), response.data)) ? parseInt(match.params.id, 10) : null
+                if (folderId) {
+                    dispatch(selectFolder(folderId))
+                    dispatch(setSearch({folderId: folderId, q: ''}))
+                }
             }
         )
     }
