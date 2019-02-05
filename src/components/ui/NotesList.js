@@ -61,10 +61,8 @@ class NotesList extends Component {
 
         // update position property that used for sorting
         const positioned = insertDraggable.map((item, index) => ({...item, position: index}))
-        onReorder(positioned)
-
-        // TODO !!!
         // ajax action here to inform server about new order
+        onReorder(positioned)
     }
 
     render() {
